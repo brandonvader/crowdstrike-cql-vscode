@@ -1,0 +1,77 @@
+// SYNTAX TEST "source.crowdstrike-cql" "assignments, functions and expressions"
+
+| cmdLength := length(CommandLine)
+// <- keyword.control.pipe.cql
+//^^^^^^^^^ variable.other.property.cql
+//          ^^ keyword.operator.assignment.cql
+//             ^^^^^^ entity.name.function.cql
+//                    ^^^^^^^^^^^ variable.other.cql
+
+// Appendix A: in an expression `/` after an operand divides.
+a:=m/fisk/i
+// <- variable.other.property.cql
+// ^ variable.other.cql
+//  ^ keyword.operator.arithmetic.cql
+//   ^^^^ variable.other.cql
+//       ^ keyword.operator.arithmetic.cql
+//        ^ variable.other.cql
+//        ^ - string.regexp
+
+rate := (bytes * 8) / duration
+//      ^ punctuation.section.group.begin.cql
+//             ^ keyword.operator.arithmetic.cql
+//                ^ punctuation.section.group.end.cql
+//                  ^ keyword.operator.arithmetic.cql
+
+ok := test(x == "a") | t := if(y > 5, then=true, else=false)
+//         ^ variable.other.cql
+//           ^^ keyword.operator.comparison.cql
+//                                    ^^^^ variable.parameter.cql
+//                                         ^^^^ constant.language.boolean.cql
+
+| groupBy([aid, ComputerName], function=[count(as=executions), max(entropy)])
+//        ^ punctuation.section.array.begin.cql
+//         ^^^ variable.other.cql
+//                             ^^^^^^^^ variable.parameter.cql
+//                                      ^ punctuation.section.array.begin.cql
+//                                       ^^^^^ entity.name.function.cql
+//                                             ^^ variable.parameter.cql
+
+| array:contains(array="a[]", value=x) | time:hour(field="@timestamp")
+//^^^^^^^^^^^^^^ entity.name.function.cql
+//                                       ^^^^^^^^^ entity.name.function.cql
+
+// Named arguments are recognized by shape, not from a fixed list.
+cidr(RemoteAddressIP4, subnet=["10.0.0.0/8"]) | in(values=[?excluded])
+//                     ^^^^^^ variable.parameter.cql
+//                     ^^^^^^ - variable.other.property
+//                                                 ^^^^^^ variable.parameter.cql
+//                                                         ^ punctuation.definition.parameter.cql
+//                                                          ^^^^^^^^ variable.other.constant.parameter.cql
+
+aid =~ !in(values=["a"]) | formatTime("%H:%M", field=@timestamp)
+// <--- variable.other.property.cql
+//  ^^ keyword.operator.shorthand.cql
+//     ^ keyword.operator.expression.not.cql
+//                                                   ^^^^^^^^^^ variable.language.cql
+
+[count(), max(x)] | regex("(?<user>\w+)", field=msg)
+// <- punctuation.section.array.begin.cql
+//                  ^^^^^ entity.name.function.cql
+
+// Named regex captures create fields.
+| url=/\/user\/(?<userId>\d+)/
+//     ^^ constant.character.escape.backslash.regexp.cql
+//             ^ punctuation.definition.group.regexp.cql
+//              ^^ punctuation.definition.group.capture.regexp.cql
+//                ^^^^^^ variable.other.property.cql
+//                       ^^ constant.character.character-class.regexp.cql
+//                         ^ keyword.operator.quantifier.regexp.cql
+
+| groupBy(host, function=[{count() | esp:=_count/300}])
+//                        ^ punctuation.section.block.begin.cql
+//                                 ^ keyword.control.pipe.cql
+//                                   ^^^ variable.other.property.cql
+//                                        ^^^^^^ variable.other.cql
+//                                              ^ keyword.operator.arithmetic.cql
+//                                               ^^^ constant.numeric.cql

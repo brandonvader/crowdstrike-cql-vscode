@@ -1,0 +1,200 @@
+{
+  "Process execution hunt": {
+    "prefix": "proc",
+    "body": [
+      "#event_simpleName=ProcessRollup2 event_platform=${1|Win,Mac,Lin|}",
+      "| ImageFileName=/\\\\\\\\${2:powershell}\\.exe\\$/i",
+      "| table([@timestamp, aid, ComputerName, UserName, ImageFileName, CommandLine], limit=${3:1000})"
+    ],
+    "description": "Falcon ProcessRollup2 hunt by image name"
+  },
+  "groupBy with count": {
+    "prefix": "gb",
+    "body": [
+      "| groupBy([${1:aid}], function=count(as=${2:_count}))",
+      "| sort(${2:_count}, order=desc, limit=${3:20})"
+    ],
+    "description": "Group, count and sort"
+  },
+  "groupBy with multiple aggregations": {
+    "prefix": "gbm",
+    "body": [
+      "| groupBy([${1:aid}], function=[count(as=count), min(@timestamp, as=firstSeen), max(@timestamp, as=lastSeen), collect([${2:field}])])"
+    ],
+    "description": "groupBy with count, first/last seen and collect"
+  },
+  "case statement": {
+    "prefix": "case",
+    "body": [
+      "| case {",
+      "    ${1:condition} | ${2:field} := \"${3:value}\" ;",
+      "    * | ${2:field} := \"${4:default}\"",
+      "  }"
+    ],
+    "description": "Conditional evaluation with a default branch"
+  },
+  "match statement": {
+    "prefix": "match",
+    "body": [
+      "| ${1:field} match {",
+      "    \"${2:value}\" => ${3:result} := \"${4}\" ;",
+      "    * => ${3:result} := \"${5:other}\"",
+      "  }"
+    ],
+    "description": "Match a field against guards"
+  },
+  "Assignment from if()": {
+    "prefix": "if",
+    "body": [
+      "| ${1:field} := if(${2:condition}, then=\"${3}\", else=\"${4}\")"
+    ],
+    "description": "Conditional assignment"
+  },
+  "Filter by list (in)": {
+    "prefix": "in",
+    "body": [
+      "| in(field=\"${1:field}\", values=[\"${2:value}\"])"
+    ],
+    "description": "Keep events where a field is in a list"
+  },
+  "Exclude private IPs (cidr)": {
+    "prefix": "cidr",
+    "body": [
+      "| !cidr(${1:RemoteAddressIP4}, subnet=[\"224.0.0.0/4\", \"10.0.0.0/8\", \"172.16.0.0/12\", \"192.168.0.0/16\", \"127.0.0.0/8\", \"169.254.0.0/16\", \"0.0.0.0/32\"])"
+    ],
+    "description": "Drop RFC1918, loopback, link-local and multicast addresses"
+  },
+  "Regex extraction": {
+    "prefix": "rx",
+    "body": [
+      "| ${1:field}=/${2:prefix}(?<${3:name}>${4:\\\\S+})/i"
+    ],
+    "description": "Extract a named capture group with a regex literal"
+  },
+  "defineTable + match join": {
+    "prefix": "deftable",
+    "body": [
+      "defineTable(name=\"${1:table}\", query={${2:#event_simpleName=ProcessRollup2}}, include=[${3:aid, TargetProcessId}])",
+      "| ${4:#event_simpleName=NetworkConnectIP4}",
+      "| match(table=\"${1:table}\", field=[${5:aid, ContextProcessId}], column=[${3:aid, TargetProcessId}], strict=true)"
+    ],
+    "description": "Ad-hoc table join"
+  },
+  "correlate": {
+    "prefix": "correlate",
+    "body": [
+      "correlate(",
+      "  ${1:first}: {",
+      "    ${2:#event_simpleName=UserLogon}",
+      "  } include: [*],",
+      "  ${3:second}: {",
+      "    ${4:#event_simpleName=ProcessRollup2}",
+      "    | ${5:aid} <=> ${1:first}.${5:aid}",
+      "  } include: [*],",
+      "  sequence=${6|false,true|}, within=${7:5m}",
+      ")"
+    ],
+    "description": "Correlate two subqueries on a linked field"
+  },
+  "timeChart": {
+    "prefix": "tc",
+    "body": [
+      "| timeChart(series=${1:ComputerName}, function=count(), span=${2:1h})"
+    ],
+    "description": "Time chart with series"
+  },
+  "Format timestamp": {
+    "prefix": "ft",
+    "body": [
+      "| ${1:time} := formatTime(\"%Y-%m-%d %H:%M:%S\", field=${2:@timestamp}, locale=en_US, timezone=${3:Z})"
+    ],
+    "description": "Human-readable timestamp"
+  },
+  "Falcon process tree link": {
+    "prefix": "ptree",
+    "body": [
+      "| format(\"[Process Tree](https://falcon.crowdstrike.com/graphs/process-explorer/tree?id=pid:%s:%s)\", field=[aid, TargetProcessId], as=\"Process Tree\")"
+    ],
+    "description": "Markdown link to the Falcon process explorer (adjust the cloud URL)"
+  },
+  "Query parameter with default": {
+    "prefix": "param",
+    "body": [
+      "${1:field} = ?{${2:name}=\"${3:*}\"}"
+    ],
+    "description": "Dashboard/user parameter with default value"
+  },
+  "Tag filter": {
+    "prefix": "tag",
+    "body": [
+      "#event_simpleName=${1:ProcessRollup2}"
+    ],
+    "description": "Filter on the event type tag"
+  },
+  "IOC lookup": {
+    "prefix": "ioc",
+    "body": [
+      "| ioc:lookup(field=[${1:RemoteAddressIP4}], type=${2|\"ip_address\",\"domain\",\"url\",\"hash_sha256\",\"hash_md5\"|}, confidenceThreshold=${3|unverified,low,medium,high|})"
+    ],
+    "description": "Annotate events with CrowdStrike threat intelligence"
+  },
+  "Top values": {
+    "prefix": "top",
+    "body": [
+      "| top(${1:field}, limit=${2:10})"
+    ],
+    "description": "Most frequent values of a field"
+  },
+  "Bucket over time": {
+    "prefix": "bucket",
+    "body": [
+      "| bucket(span=${1:1h}, field=${2:ComputerName}, function=${3:count()})"
+    ],
+    "description": "Aggregate into fixed time buckets"
+  },
+  "Lookup file join": {
+    "prefix": "lookup",
+    "body": [
+      "| match(file=\"${1:lookup.csv}\", field=${2:field}, column=${3:column}, include=[${4:column}], strict=${5|true,false|})"
+    ],
+    "description": "Enrich events from an uploaded lookup file"
+  },
+  "IP enrichment": {
+    "prefix": "ipenrich",
+    "body": [
+      "| ipLocation(field=${1:RemoteAddressIP4})",
+      "| asn(field=${1:RemoteAddressIP4})"
+    ],
+    "description": "Add geolocation and ASN for an IP field"
+  },
+  "Select columns": {
+    "prefix": "select",
+    "body": [
+      "| select([${1:@timestamp, aid, ComputerName}])"
+    ],
+    "description": "Keep only the listed fields (no aggregation)"
+  },
+  "Rename fields": {
+    "prefix": "rename",
+    "body": [
+      "| rename(field=[[\"${1:field}\", \"${2:New Name}\"]])"
+    ],
+    "description": "Rename one or more fields"
+  },
+  "Default value": {
+    "prefix": "default",
+    "body": [
+      "| default(field=${1:field}, value=\"${2:N/A}\", replaceEmpty=true)"
+    ],
+    "description": "Fill missing or empty fields"
+  },
+  "Folding region": {
+    "prefix": "region",
+    "body": [
+      "// #region ${1:name}",
+      "$0",
+      "// #endregion"
+    ],
+    "description": "Foldable region of a long query"
+  }
+}

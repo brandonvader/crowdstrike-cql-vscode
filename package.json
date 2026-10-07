@@ -1,0 +1,107 @@
+{
+  "name": "crowdstrike-cql",
+  "displayName": "CrowdStrike CQL",
+  "description": "CrowdStrike Query Language (CQL / LogScale / NG-SIEM) support: syntax highlighting, snippets, and queries embedded in Markdown and YAML.",
+  "version": "0.1.0",
+  "publisher": "brandonvader",
+  "author": {
+    "name": "Brandon Vader",
+    "email": "brandon@thetechpirate.net"
+  },
+  "license": "GPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brandonvader/crowdstrike-cql-vscode"
+  },
+  "bugs": {
+    "url": "https://github.com/brandonvader/crowdstrike-cql-vscode/issues"
+  },
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
+  "keywords": [
+    "crowdstrike",
+    "cql",
+    "logscale",
+    "ngsiem",
+    "falcon",
+    "humio",
+    "siem",
+    "threat hunting"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "crowdstrike-cql",
+        "aliases": [
+          "CrowdStrike CQL",
+          "LogScale",
+          "NG-SIEM"
+        ],
+        "extensions": [
+          ".ngsiem",
+          ".logscale",
+          ".lql"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "crowdstrike-cql",
+        "scopeName": "source.crowdstrike-cql",
+        "path": "./syntaxes/crowdstrike-cql.tmLanguage.json"
+      },
+      {
+        "scopeName": "markdown.crowdstrike-cql.codeblock",
+        "path": "./syntaxes/markdown-injection.tmLanguage.json",
+        "injectTo": [
+          "text.html.markdown"
+        ],
+        "embeddedLanguages": {
+          "meta.embedded.block.crowdstrike-cql": "crowdstrike-cql"
+        }
+      },
+      {
+        "scopeName": "yaml.crowdstrike-cql.injection",
+        "path": "./syntaxes/yaml-injection.tmLanguage.json",
+        "injectTo": [
+          "source.yaml"
+        ],
+        "embeddedLanguages": {
+          "meta.embedded.block.crowdstrike-cql": "crowdstrike-cql",
+          "meta.embedded.inline.crowdstrike-cql": "crowdstrike-cql"
+        }
+      }
+    ],
+    "snippets": [
+      {
+        "language": "crowdstrike-cql",
+        "path": "./snippets/crowdstrike-cql.code-snippets"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "node scripts/build-grammars.mjs",
+    "test": "npm run build && npm run test:grammar && npm run test:snap && npm run test:snippets",
+    "test:grammar": "vscode-tmgrammar-test -g test/fixtures/grammars/markdown.tmLanguage.json -g test/fixtures/grammars/yaml.tmLanguage.json -g test/fixtures/grammars/yaml-1.2.tmLanguage.json -g test/fixtures/grammars/yaml-1.3.tmLanguage.json -g test/fixtures/grammars/yaml-1.1.tmLanguage.json -g test/fixtures/grammars/yaml-1.0.tmLanguage.json -g test/fixtures/grammars/yaml-embedded.tmLanguage.json \"test/grammar/**/*.{logscale,md,yaml}\"",
+    "test:snap": "vscode-tmgrammar-snap \"test/snap/*.logscale\"",
+    "test:snippets": "node scripts/check-snippets.mjs",
+    "corpus:scopes": "npm run build && node scripts/corpus-scopes.mjs",
+    "package": "npm run build && vsce package",
+    "vscode:prepublish": "npm run build",
+    "test:snap:update": "vscode-tmgrammar-snap --updateSnapshot \"test/snap/*.logscale\"",
+    "screenshot": "xvfb-run -a -s \"-screen 0 1400x900x24\" node scripts/screenshot.mjs"
+  },
+  "devDependencies": {
+    "@vscode/vsce": "^4.0.0",
+    "js-yaml": "^5.4.3",
+    "vscode-oniguruma": "^2.0.1",
+    "vscode-textmate": "^9.3.2",
+    "vscode-tmgrammar-test": "^0.1.3"
+  }
+}

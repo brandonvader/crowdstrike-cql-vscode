@@ -1,0 +1,495 @@
+# TextMate grammar for the CrowdStrike Query Language (CQL / LogScale / NG-SIEM).
+#
+# Source of truth for the language is the tree-sitter grammar in
+# brandonvader/crowdstrike-cql-zed; this grammar approximates it with the
+# line-based TextMate model. Semantic tokens (Phase 2) correct what it cannot.
+#
+# `{{name}}` placeholders are expanded from `variables` by scripts/build-grammars.mjs.
+#
+# Context model:
+#   #pipeline   filter context (top level, `{ }` subqueries, case branches):
+#               bare words are free-text / unquoted strings, `a = b` compares
+#               field `a` to the *string* "b".
+#   #expression eval context (function arguments, `:=` right-hand side, arrays):
+#               bare words are field references, `/` after an operand divides.
+
+name: CrowdStrike CQL
+scopeName: source.crowdstrike-cql
+fileTypes: [ngsiem, logscale, lql]
+
+variables:
+  # Unquoted field names: foo, foo.bar, @timestamp, #event_simpleName, foo[0].bar
+  field_char: '[\p{L}\p{N}_@#.%&\\^~]'
+  field: '(?:[\p{L}_@#]{{field_char}}*(?:\[\d*\]{{field_char}}*)*)'
+  qfield: '(?:"(?:[^"\\]|\\.)*")'
+  any_field: '(?:{{field}}|{{qfield}})'
+  # Identifiers in expressions: no %, &, ^, ~ (those are operators there).
+  ident: '(?:[\p{L}_@#][\p{L}\p{N}_@#.]*(?:\[\d*\][\p{L}\p{N}_@#.]*)*)'
+  fn_name: '(?:[A-Za-z_][A-Za-z0-9_]*(?::[A-Za-z_][A-Za-z0-9_]*)?)'
+  # Unquoted pattern chunk (Appendix C of the grammar guide). ':' and '/' may
+  # only appear between chunks (or one trailing '/'), so `https://x/` and
+  # `docker/*` are patterns while `foo // comment` is a comment.
+  pchar: '[^\s"''`(),;=!<>|\[\]{}?$/:]'
+  upattern: '(?:{{pchar}}+(?:[:/]+{{pchar}}+)*/?)'
+  # A token boundary: what may follow a complete value.
+  vend: '(?=[\s|),;}\]]|$)'
+  number: '(?:-?\d+(?:\.\d+)*(?:[eE][+-]?\d+)?)'
+  duration: '(?:\d+(?:\.\d+)?[A-Za-z][A-Za-z0-9]*)'
+  filter_op: '(?:!=|<=|>=|=(?![=~>])|<(?![=])|>|(?i:like)\b)'
+
+patterns:
+  - include: '#pipeline'
+
+repository:
+
+  # ---------------------------------------------------------------------------
+  # Filter / pipeline context
+  # ---------------------------------------------------------------------------
+
+  pipeline:
+    patterns:
+      - include: '#comments'
+      - include: '#pipe'
+      - include: '#case-statement'
+      - include: '#match-statement'
+      - include: '#saved-query'
+      - include: '#field-shorthand'
+      - include: '#assignment'
+      - include: '#field-correlation'
+      - include: '#comparison'
+      - include: '#logical-operators'
+      - include: '#function-call'
+      - include: '#filter-group'
+      - include: '#array'
+      - include: '#subquery'
+      - include: '#match-guard'
+      - include: '#free-text'
+      - include: '#filter-operators'
+      - include: '#punctuation'
+
+  pipe:
+    match: '\|'
+    name: keyword.control.pipe.cql
+
+  case-statement:
+    begin: '\b(case)\s*(\{)'
+    beginCaptures:
+      '1': { name: keyword.control.case.cql }
+      '2': { name: punctuation.section.block.begin.cql }
+    end: '\}'
+    endCaptures:
+      '0': { name: punctuation.section.block.end.cql }
+    name: meta.case.cql
+    patterns:
+      - include: '#pipeline'
+
+  # field match { guard => pipeline ; ... }
+  match-statement:
+    begin: '({{any_field}})\s+(match)\s*(\{)'
+    beginCaptures:
+      '1': { patterns: [{ include: '#field-name' }] }
+      '2': { name: keyword.control.match.cql }
+      '3': { name: punctuation.section.block.begin.cql }
+    end: '\}'
+    endCaptures:
+      '0': { name: punctuation.section.block.end.cql }
+    name: meta.match.cql
+    patterns:
+      - include: '#pipeline'
+
+  # Unquoted match-arm guards: `foo =>`, `* =>`
+  match-guard:
+    match: '(?:(\*+)|({{upattern}}))\s*(=>)'
+    captures:
+      '1': { name: string.unquoted.wildcard.cql }
+      '2': { name: string.unquoted.cql }
+      '3': { name: keyword.operator.arrow.cql }
+
+  # $savedQuery(arg=value), $"Saved Query"(), $parser://pkg:name()
+  saved-query:
+    begin: '(\$)("(?:[^"\\]|\\.)*"|[^\s("|]+)(\()'
+    beginCaptures:
+      '1': { name: punctuation.definition.saved-query.cql }
+      '2': { name: entity.name.function.saved-query.cql }
+      '3': { name: punctuation.definition.arguments.begin.cql }
+    end: '\)'
+    endCaptures:
+      '0': { name: punctuation.definition.arguments.end.cql }
+    name: meta.saved-query.cql
+    patterns:
+      - include: '#arguments'
+
+  # field =~ function(...)
+  field-shorthand:
+    match: '({{any_field}})\s*(=~)\s*(!)?'
+    captures:
+      '1': { patterns: [{ include: '#field-name' }] }
+      '2': { name: keyword.operator.shorthand.cql }
+      '3': { name: keyword.operator.expression.not.cql }
+
+  # field := expression
+  assignment:
+    begin: '({{any_field}})\s*(:=)'
+    beginCaptures:
+      '1': { patterns: [{ include: '#field-name' }] }
+      '2': { name: keyword.operator.assignment.cql }
+    end: '(?=[|;,}\])])|$'
+    name: meta.assignment.cql
+    patterns:
+      - include: '#expression'
+
+  # a <=> b.field  (correlate field-to-field: both sides are fields)
+  field-correlation:
+    match: '({{any_field}})\s*(<=>)\s*({{any_field}})'
+    captures:
+      '1': { patterns: [{ include: '#field-name' }] }
+      '2': { name: keyword.operator.comparison.cql }
+      '3': { patterns: [{ include: '#field-name' }] }
+
+  # field op value. The right-hand side is never a field reference. The
+  # `(?!\G)` end closes the rule as soon as one value has been consumed.
+  comparison:
+    begin: '({{any_field}})\s*({{filter_op}})\s*'
+    beginCaptures:
+      '1': { patterns: [{ include: '#field-name' }] }
+      '2': { patterns: [{ include: '#comparison-operator' }] }
+    end: '(?!\G)'
+    name: meta.comparison.cql
+    patterns:
+      - include: '#filter-value'
+
+  comparison-operator:
+    patterns:
+      - match: '(?i:like)'
+        name: keyword.operator.expression.like.cql
+      - match: '.+'
+        name: keyword.operator.comparison.cql
+
+  filter-value:
+    patterns:
+      - include: '#regex'
+      - include: '#string'
+      - include: '#parameter'
+      - include: '#function-call'
+      - match: '\G{{number}}{{vend}}'
+        name: constant.numeric.cql
+      - match: '\G{{duration}}{{vend}}'
+        name: constant.numeric.duration.cql
+      - match: '\G\*+{{vend}}'
+        name: string.unquoted.wildcard.cql
+      - match: '\G{{upattern}}'
+        name: string.unquoted.cql
+
+  logical-operators:
+    patterns:
+      - match: '(?i)\b(and)\b'
+        name: keyword.operator.expression.and.cql
+      - match: '(?i)\b(or)\b'
+        name: keyword.operator.expression.or.cql
+      - match: '(?i)\b(not)\b'
+        name: keyword.operator.expression.not.cql
+      - match: '!(?!=)'
+        name: keyword.operator.expression.not.cql
+
+  # ( filter )
+  filter-group:
+    begin: '\('
+    beginCaptures:
+      '0': { name: punctuation.section.group.begin.cql }
+    end: '\)'
+    endCaptures:
+      '0': { name: punctuation.section.group.end.cql }
+    patterns:
+      - include: '#pipeline'
+
+  # Free-text search terms: anything that is not a field comparison.
+  free-text:
+    patterns:
+      - include: '#regex'
+      - include: '#string'
+      - include: '#parameter'
+      - match: '(?<![\w.])\b{{number}}{{vend}}'
+        name: constant.numeric.cql
+      - match: '\*+{{vend}}'
+        name: string.unquoted.wildcard.cql
+      - match: '{{upattern}}'
+        name: string.unquoted.cql
+
+  filter-operators:
+    patterns:
+      - match: '=>'
+        name: keyword.operator.arrow.cql
+      - match: '<=>|==|!=|<=|>=|<|>|='
+        name: keyword.operator.comparison.cql
+
+  # ---------------------------------------------------------------------------
+  # Expression context
+  # ---------------------------------------------------------------------------
+
+  expression:
+    patterns:
+      - include: '#comments'
+      - include: '#labeled-subquery'
+      - include: '#subquery'
+      - include: '#attribute'
+      - include: '#array'
+      - include: '#function-call'
+      - include: '#saved-query'
+      - include: '#parameter'
+      - include: '#string'
+      - include: '#division'
+      - include: '#regex'
+      - include: '#expression-group'
+      - include: '#assignment'
+      - match: '\b(true|false)\b'
+        name: constant.language.boolean.cql
+      - match: '(?<![\w.@#])\d+(?:\.\d+)?[A-Za-z][A-Za-z0-9]*'
+        name: constant.numeric.duration.cql
+      - match: '(?<![\w.@#])\d+(?:\.\d+)*(?:[eE][+-]?\d+)?'
+        name: constant.numeric.cql
+      - include: '#arithmetic'
+      - match: '\*{{pchar}}+'
+        name: string.unquoted.cql
+      - match: '\*'
+        name: string.unquoted.wildcard.cql
+      - include: '#expression-operators'
+      - include: '#identifier'
+      - include: '#punctuation'
+
+  # `/` after an operand is division (Appendix A: `a:=m/fisk/i` divides).
+  # The leading \s* makes this match start before a competing regex would.
+  division:
+    match: '(?<=[\p{L}\p{N}_@#.)\]])\s*(/)(?![/*])'
+    captures:
+      '1': { name: keyword.operator.arithmetic.cql }
+
+  # `*` after an operand is multiplication, otherwise a wildcard.
+  arithmetic:
+    match: '(?<=[\p{L}\p{N}_@#.)\]])\s*([*%])'
+    captures:
+      '1': { name: keyword.operator.arithmetic.cql }
+
+  expression-operators:
+    patterns:
+      - match: '=>'
+        name: keyword.operator.arrow.cql
+      - match: '<=>|==|!=|<=|>=|<|>'
+        name: keyword.operator.comparison.cql
+      - match: '[+\-*/%]'
+        name: keyword.operator.arithmetic.cql
+      - match: '!'
+        name: keyword.operator.expression.not.cql
+      - match: '='
+        name: keyword.operator.comparison.cql
+
+  expression-group:
+    begin: '\('
+    beginCaptures:
+      '0': { name: punctuation.section.group.begin.cql }
+    end: '\)'
+    endCaptures:
+      '0': { name: punctuation.section.group.end.cql }
+    patterns:
+      - include: '#expression'
+
+  # correlate(): `name: { ... } include: [a, b]`
+  labeled-subquery:
+    begin: '([A-Za-z_][\w]*)\s*(:)\s*(\{)'
+    beginCaptures:
+      '1': { name: entity.name.label.cql }
+      '2': { name: punctuation.separator.label.cql }
+      '3': { name: punctuation.section.block.begin.cql }
+    end: '\}'
+    endCaptures:
+      '0': { name: punctuation.section.block.end.cql }
+    name: meta.subquery.cql
+    patterns:
+      - include: '#pipeline'
+
+  attribute:
+    match: '\b([A-Za-z_]\w*)\s*(:)(?![=:])'
+    captures:
+      '1': { name: entity.other.attribute-name.cql }
+      '2': { name: punctuation.separator.key-value.cql }
+
+  # { pipeline }
+  subquery:
+    begin: '\{'
+    beginCaptures:
+      '0': { name: punctuation.section.block.begin.cql }
+    end: '\}'
+    endCaptures:
+      '0': { name: punctuation.section.block.end.cql }
+    name: meta.subquery.cql
+    patterns:
+      - include: '#pipeline'
+
+  # [a, b] / [count(), max(x)] (also the stats shorthand at pipeline level)
+  array:
+    begin: '\['
+    beginCaptures:
+      '0': { name: punctuation.section.array.begin.cql }
+    end: '\]'
+    endCaptures:
+      '0': { name: punctuation.section.array.end.cql }
+    name: meta.array.cql
+    patterns:
+      - include: '#expression'
+
+  # ---------------------------------------------------------------------------
+  # Function calls
+  # ---------------------------------------------------------------------------
+
+  function-call:
+    begin: '({{fn_name}})(\()'
+    beginCaptures:
+      '1': { name: entity.name.function.cql }
+      '2': { name: punctuation.definition.arguments.begin.cql }
+    end: '\)'
+    endCaptures:
+      '0': { name: punctuation.definition.arguments.end.cql }
+    name: meta.function-call.cql
+    patterns:
+      - include: '#arguments'
+
+  arguments:
+    patterns:
+      - include: '#named-argument'
+      - include: '#expression'
+
+  named-argument:
+    match: '({{ident}}|{{qfield}})\s*(=)(?![=~>])'
+    captures:
+      '1': { name: variable.parameter.cql }
+      '2': { name: keyword.operator.assignment.argument.cql }
+
+  # ---------------------------------------------------------------------------
+  # Terminals
+  # ---------------------------------------------------------------------------
+
+  # A field name in a "this is definitely a field" position (left-hand side).
+  field-name:
+    patterns:
+      - match: '(?<![\p{L}\p{N}_@#.])#.*'
+        name: entity.name.tag.cql
+      - match: '(?<![\p{L}\p{N}_@#.])@.*'
+        name: variable.language.cql
+      - match: '.+'
+        name: variable.other.property.cql
+
+  # A bare word in an expression: a field reference.
+  identifier:
+    patterns:
+      - match: '#{{field_char}}+'
+        name: entity.name.tag.cql
+      - match: '@{{field_char}}+'
+        name: variable.language.cql
+      - match: '{{ident}}'
+        name: variable.other.cql
+
+  # ?name, ?"quoted name", ?{name=default}
+  parameter:
+    patterns:
+      - begin: '(\?\{)\s*([\p{L}\p{N}_@#.\-:]+|"(?:[^"\\]|\\.)*")\s*(=)'
+        beginCaptures:
+          '1': { name: punctuation.definition.parameter.begin.cql }
+          '2': { name: variable.other.constant.parameter.cql }
+          '3': { name: keyword.operator.assignment.cql }
+        end: '\}'
+        endCaptures:
+          '0': { name: punctuation.definition.parameter.end.cql }
+        name: meta.parameter.cql
+        patterns:
+          - include: '#string'
+          - match: '\*+(?=\s*\})'
+            name: string.unquoted.wildcard.cql
+          - match: '{{upattern}}'
+            name: string.unquoted.cql
+      - match: '(\?)([\p{L}\p{N}_@#.\-:]+|"(?:[^"\\]|\\.)*")'
+        captures:
+          '1': { name: punctuation.definition.parameter.cql }
+          '2': { name: variable.other.constant.parameter.cql }
+
+  string:
+    begin: '"'
+    beginCaptures:
+      '0': { name: punctuation.definition.string.begin.cql }
+    end: '(")|(?=$)'
+    endCaptures:
+      '1': { name: punctuation.definition.string.end.cql }
+    name: string.quoted.double.cql
+    patterns:
+      - match: '\\.'
+        name: constant.character.escape.cql
+
+  # /pattern/flags
+  regex:
+    begin: '(/)(?![/*])'
+    beginCaptures:
+      '1': { name: punctuation.definition.string.begin.regexp.cql }
+    end: '(/)([dgimF]*)|(?=$)'
+    endCaptures:
+      '1': { name: punctuation.definition.string.end.regexp.cql }
+      '2': { name: keyword.other.flag.regexp.cql }
+    name: string.regexp.cql
+    patterns:
+      - include: '#regex-body'
+
+  regex-body:
+    patterns:
+      - match: '\\[dDwWsSbBhHvV]'
+        name: constant.character.character-class.regexp.cql
+      - match: '\\.'
+        name: constant.character.escape.backslash.regexp.cql
+      - begin: '(\[)(\^)?'
+        beginCaptures:
+          '1': { name: punctuation.definition.character-class.regexp.cql }
+          '2': { name: keyword.operator.negation.regexp.cql }
+        end: '(\])|(?=$)'
+        endCaptures:
+          '1': { name: punctuation.definition.character-class.regexp.cql }
+        name: constant.other.character-class.set.regexp.cql
+        patterns:
+          - match: '\\.'
+            name: constant.character.escape.backslash.regexp.cql
+      # Named capture groups create fields in CQL.
+      - match: '(\()(\?<)([A-Za-z_]\w*)(>)'
+        captures:
+          '1': { name: punctuation.definition.group.regexp.cql }
+          '2': { name: punctuation.definition.group.capture.regexp.cql }
+          '3': { name: variable.other.property.cql }
+          '4': { name: punctuation.definition.group.capture.regexp.cql }
+      - match: '(\()(\?(?:[:=!>]|<[=!]))?'
+        captures:
+          '1': { name: punctuation.definition.group.regexp.cql }
+          '2': { name: keyword.operator.lookaround.regexp.cql }
+      - match: '\)'
+        name: punctuation.definition.group.regexp.cql
+      - match: '(?:[*+?]|\{\d+(?:,\d*)?\})[?+]?'
+        name: keyword.operator.quantifier.regexp.cql
+      - match: '[\^$]'
+        name: keyword.control.anchor.regexp.cql
+      - match: '\|'
+        name: keyword.operator.or.regexp.cql
+
+  comments:
+    patterns:
+      - begin: '/\*'
+        beginCaptures:
+          '0': { name: punctuation.definition.comment.begin.cql }
+        end: '\*/'
+        endCaptures:
+          '0': { name: punctuation.definition.comment.end.cql }
+        name: comment.block.cql
+      - begin: '//'
+        beginCaptures:
+          '0': { name: punctuation.definition.comment.cql }
+        end: '$'
+        name: comment.line.double-slash.cql
+
+  punctuation:
+    patterns:
+      - match: ','
+        name: punctuation.separator.comma.cql
+      - match: ';'
+        name: punctuation.terminator.statement.cql

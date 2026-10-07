@@ -1,0 +1,365 @@
+>/* Suspicious encoded PowerShell, grouped per host.
+#^^ source.crowdstrike-cql comment.block.cql punctuation.definition.comment.begin.cql
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.crowdstrike-cql comment.block.cql
+>   Demonstrates most CQL syntax. */
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.crowdstrike-cql comment.block.cql
+#                                 ^^ source.crowdstrike-cql comment.block.cql punctuation.definition.comment.end.cql
+>#event_simpleName=ProcessRollup2 event_platform=Win
+#^^^^^^^^^^^^^^^^^ source.crowdstrike-cql meta.comparison.cql entity.name.tag.cql
+#                 ^ source.crowdstrike-cql meta.comparison.cql keyword.operator.comparison.cql
+#                  ^^^^^^^^^^^^^^ source.crowdstrike-cql meta.comparison.cql string.unquoted.cql
+#                                ^ source.crowdstrike-cql
+#                                 ^^^^^^^^^^^^^^ source.crowdstrike-cql meta.comparison.cql variable.other.property.cql
+#                                               ^ source.crowdstrike-cql meta.comparison.cql keyword.operator.comparison.cql
+#                                                ^^^ source.crowdstrike-cql meta.comparison.cql string.unquoted.cql
+>| ImageFileName=/\\powershell(_ise)?\.exe$/i
+#^ source.crowdstrike-cql keyword.control.pipe.cql
+# ^ source.crowdstrike-cql
+#  ^^^^^^^^^^^^^ source.crowdstrike-cql meta.comparison.cql variable.other.property.cql
+#               ^ source.crowdstrike-cql meta.comparison.cql keyword.operator.comparison.cql
+#                ^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql punctuation.definition.string.begin.regexp.cql
+#                 ^^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql constant.character.escape.backslash.regexp.cql
+#                   ^^^^^^^^^^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql
+#                             ^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql punctuation.definition.group.regexp.cql
+#                              ^^^^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql
+#                                  ^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql punctuation.definition.group.regexp.cql
+#                                   ^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql keyword.operator.quantifier.regexp.cql
+#                                    ^^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql constant.character.escape.backslash.regexp.cql
+#                                      ^^^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql
+#                                         ^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql keyword.control.anchor.regexp.cql
+#                                          ^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql punctuation.definition.string.end.regexp.cql
+#                                           ^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql keyword.other.flag.regexp.cql
+>| CommandLine=/\s-(e|enc|encodedcommand)\s/i OR CommandLine="*FromBase64String*"
+#^ source.crowdstrike-cql keyword.control.pipe.cql
+# ^ source.crowdstrike-cql
+#  ^^^^^^^^^^^ source.crowdstrike-cql meta.comparison.cql variable.other.property.cql
+#             ^ source.crowdstrike-cql meta.comparison.cql keyword.operator.comparison.cql
+#              ^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql punctuation.definition.string.begin.regexp.cql
+#               ^^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql constant.character.character-class.regexp.cql
+#                 ^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql
+#                  ^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql punctuation.definition.group.regexp.cql
+#                   ^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql
+#                    ^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql keyword.operator.or.regexp.cql
+#                     ^^^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql
+#                        ^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql keyword.operator.or.regexp.cql
+#                         ^^^^^^^^^^^^^^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql
+#                                       ^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql punctuation.definition.group.regexp.cql
+#                                        ^^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql constant.character.character-class.regexp.cql
+#                                          ^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql punctuation.definition.string.end.regexp.cql
+#                                           ^ source.crowdstrike-cql meta.comparison.cql string.regexp.cql keyword.other.flag.regexp.cql
+#                                            ^ source.crowdstrike-cql
+#                                             ^^ source.crowdstrike-cql keyword.operator.expression.or.cql
+#                                               ^ source.crowdstrike-cql
+#                                                ^^^^^^^^^^^ source.crowdstrike-cql meta.comparison.cql variable.other.property.cql
+#                                                           ^ source.crowdstrike-cql meta.comparison.cql keyword.operator.comparison.cql
+#                                                            ^ source.crowdstrike-cql meta.comparison.cql string.quoted.double.cql punctuation.definition.string.begin.cql
+#                                                             ^^^^^^^^^^^^^^^^^^ source.crowdstrike-cql meta.comparison.cql string.quoted.double.cql
+#                                                                               ^ source.crowdstrike-cql meta.comparison.cql string.quoted.double.cql punctuation.definition.string.end.cql
+>| not in(field="UserName", values=["SYSTEM", "LOCAL SERVICE"])
+#^ source.crowdstrike-cql keyword.control.pipe.cql
+# ^ source.crowdstrike-cql
+#  ^^^ source.crowdstrike-cql keyword.operator.expression.not.cql
+#     ^ source.crowdstrike-cql
+#      ^^ source.crowdstrike-cql meta.function-call.cql entity.name.function.cql
+#        ^ source.crowdstrike-cql meta.function-call.cql punctuation.definition.arguments.begin.cql
+#         ^^^^^ source.crowdstrike-cql meta.function-call.cql variable.parameter.cql
+#              ^ source.crowdstrike-cql meta.function-call.cql keyword.operator.assignment.argument.cql
+#               ^ source.crowdstrike-cql meta.function-call.cql string.quoted.double.cql punctuation.definition.string.begin.cql
+#                ^^^^^^^^ source.crowdstrike-cql meta.function-call.cql string.quoted.double.cql
+#                        ^ source.crowdstrike-cql meta.function-call.cql string.quoted.double.cql punctuation.definition.string.end.cql
+#                         ^ source.crowdstrike-cql meta.function-call.cql punctuation.separator.comma.cql
+#                          ^ source.crowdstrike-cql meta.function-call.cql
+#                           ^^^^^^ source.crowdstrike-cql meta.function-call.cql variable.parameter.cql
+#                                 ^ source.crowdstrike-cql meta.function-call.cql keyword.operator.assignment.argument.cql
+#                                  ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql punctuation.section.array.begin.cql
+#                                   ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql string.quoted.double.cql punctuation.definition.string.begin.cql
+#                                    ^^^^^^ source.crowdstrike-cql meta.function-call.cql meta.array.cql string.quoted.double.cql
+#                                          ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql string.quoted.double.cql punctuation.definition.string.end.cql
+#                                           ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql punctuation.separator.comma.cql
+#                                            ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql
+#                                             ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql string.quoted.double.cql punctuation.definition.string.begin.cql
+#                                              ^^^^^^^^^^^^^ source.crowdstrike-cql meta.function-call.cql meta.array.cql string.quoted.double.cql
+#                                                           ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql string.quoted.double.cql punctuation.definition.string.end.cql
+#                                                            ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql punctuation.section.array.end.cql
+#                                                             ^ source.crowdstrike-cql meta.function-call.cql punctuation.definition.arguments.end.cql
+>| aid =~ !in(values=[?excluded_aid])
+#^ source.crowdstrike-cql keyword.control.pipe.cql
+# ^ source.crowdstrike-cql
+#  ^^^ source.crowdstrike-cql variable.other.property.cql
+#     ^ source.crowdstrike-cql
+#      ^^ source.crowdstrike-cql keyword.operator.shorthand.cql
+#        ^ source.crowdstrike-cql
+#         ^ source.crowdstrike-cql keyword.operator.expression.not.cql
+#          ^^ source.crowdstrike-cql meta.function-call.cql entity.name.function.cql
+#            ^ source.crowdstrike-cql meta.function-call.cql punctuation.definition.arguments.begin.cql
+#             ^^^^^^ source.crowdstrike-cql meta.function-call.cql variable.parameter.cql
+#                   ^ source.crowdstrike-cql meta.function-call.cql keyword.operator.assignment.argument.cql
+#                    ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql punctuation.section.array.begin.cql
+#                     ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql punctuation.definition.parameter.cql
+#                      ^^^^^^^^^^^^ source.crowdstrike-cql meta.function-call.cql meta.array.cql variable.other.constant.parameter.cql
+#                                  ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql punctuation.section.array.end.cql
+#                                   ^ source.crowdstrike-cql meta.function-call.cql punctuation.definition.arguments.end.cql
+>| cmdLength := length(CommandLine)
+#^ source.crowdstrike-cql keyword.control.pipe.cql
+# ^ source.crowdstrike-cql
+#  ^^^^^^^^^ source.crowdstrike-cql meta.assignment.cql variable.other.property.cql
+#           ^ source.crowdstrike-cql meta.assignment.cql
+#            ^^ source.crowdstrike-cql meta.assignment.cql keyword.operator.assignment.cql
+#              ^ source.crowdstrike-cql meta.assignment.cql
+#               ^^^^^^ source.crowdstrike-cql meta.assignment.cql meta.function-call.cql entity.name.function.cql
+#                     ^ source.crowdstrike-cql meta.assignment.cql meta.function-call.cql punctuation.definition.arguments.begin.cql
+#                      ^^^^^^^^^^^ source.crowdstrike-cql meta.assignment.cql meta.function-call.cql variable.other.cql
+#                                 ^ source.crowdstrike-cql meta.assignment.cql meta.function-call.cql punctuation.definition.arguments.end.cql
+>| entropy := shannonEntropy(CommandLine)
+#^ source.crowdstrike-cql keyword.control.pipe.cql
+# ^ source.crowdstrike-cql
+#  ^^^^^^^ source.crowdstrike-cql meta.assignment.cql variable.other.property.cql
+#         ^ source.crowdstrike-cql meta.assignment.cql
+#          ^^ source.crowdstrike-cql meta.assignment.cql keyword.operator.assignment.cql
+#            ^ source.crowdstrike-cql meta.assignment.cql
+#             ^^^^^^^^^^^^^^ source.crowdstrike-cql meta.assignment.cql meta.function-call.cql entity.name.function.cql
+#                           ^ source.crowdstrike-cql meta.assignment.cql meta.function-call.cql punctuation.definition.arguments.begin.cql
+#                            ^^^^^^^^^^^ source.crowdstrike-cql meta.assignment.cql meta.function-call.cql variable.other.cql
+#                                       ^ source.crowdstrike-cql meta.assignment.cql meta.function-call.cql punctuation.definition.arguments.end.cql
+>| case {
+#^ source.crowdstrike-cql keyword.control.pipe.cql
+# ^ source.crowdstrike-cql
+#  ^^^^ source.crowdstrike-cql meta.case.cql keyword.control.case.cql
+#      ^ source.crowdstrike-cql meta.case.cql
+#       ^ source.crowdstrike-cql meta.case.cql punctuation.section.block.begin.cql
+>    entropy > 5.5 | severity := "high" ;
+#^^^^ source.crowdstrike-cql meta.case.cql
+#    ^^^^^^^ source.crowdstrike-cql meta.case.cql meta.comparison.cql variable.other.property.cql
+#           ^ source.crowdstrike-cql meta.case.cql meta.comparison.cql
+#            ^ source.crowdstrike-cql meta.case.cql meta.comparison.cql keyword.operator.comparison.cql
+#             ^ source.crowdstrike-cql meta.case.cql meta.comparison.cql
+#              ^^^ source.crowdstrike-cql meta.case.cql meta.comparison.cql constant.numeric.cql
+#                 ^ source.crowdstrike-cql meta.case.cql
+#                  ^ source.crowdstrike-cql meta.case.cql keyword.control.pipe.cql
+#                   ^ source.crowdstrike-cql meta.case.cql
+#                    ^^^^^^^^ source.crowdstrike-cql meta.case.cql meta.assignment.cql variable.other.property.cql
+#                            ^ source.crowdstrike-cql meta.case.cql meta.assignment.cql
+#                             ^^ source.crowdstrike-cql meta.case.cql meta.assignment.cql keyword.operator.assignment.cql
+#                               ^ source.crowdstrike-cql meta.case.cql meta.assignment.cql
+#                                ^ source.crowdstrike-cql meta.case.cql meta.assignment.cql string.quoted.double.cql punctuation.definition.string.begin.cql
+#                                 ^^^^ source.crowdstrike-cql meta.case.cql meta.assignment.cql string.quoted.double.cql
+#                                     ^ source.crowdstrike-cql meta.case.cql meta.assignment.cql string.quoted.double.cql punctuation.definition.string.end.cql
+#                                      ^ source.crowdstrike-cql meta.case.cql meta.assignment.cql
+#                                       ^ source.crowdstrike-cql meta.case.cql punctuation.terminator.statement.cql
+>    cmdLength >= 1000 | severity := "medium" ;
+#^^^^ source.crowdstrike-cql meta.case.cql
+#    ^^^^^^^^^ source.crowdstrike-cql meta.case.cql meta.comparison.cql variable.other.property.cql
+#             ^ source.crowdstrike-cql meta.case.cql meta.comparison.cql
+#              ^^ source.crowdstrike-cql meta.case.cql meta.comparison.cql keyword.operator.comparison.cql
+#                ^ source.crowdstrike-cql meta.case.cql meta.comparison.cql
+#                 ^^^^ source.crowdstrike-cql meta.case.cql meta.comparison.cql constant.numeric.cql
+#                     ^ source.crowdstrike-cql meta.case.cql
+#                      ^ source.crowdstrike-cql meta.case.cql keyword.control.pipe.cql
+#                       ^ source.crowdstrike-cql meta.case.cql
+#                        ^^^^^^^^ source.crowdstrike-cql meta.case.cql meta.assignment.cql variable.other.property.cql
+#                                ^ source.crowdstrike-cql meta.case.cql meta.assignment.cql
+#                                 ^^ source.crowdstrike-cql meta.case.cql meta.assignment.cql keyword.operator.assignment.cql
+#                                   ^ source.crowdstrike-cql meta.case.cql meta.assignment.cql
+#                                    ^ source.crowdstrike-cql meta.case.cql meta.assignment.cql string.quoted.double.cql punctuation.definition.string.begin.cql
+#                                     ^^^^^^ source.crowdstrike-cql meta.case.cql meta.assignment.cql string.quoted.double.cql
+#                                           ^ source.crowdstrike-cql meta.case.cql meta.assignment.cql string.quoted.double.cql punctuation.definition.string.end.cql
+#                                            ^ source.crowdstrike-cql meta.case.cql meta.assignment.cql
+#                                             ^ source.crowdstrike-cql meta.case.cql punctuation.terminator.statement.cql
+>    * | severity := "low"
+#^^^^ source.crowdstrike-cql meta.case.cql
+#    ^ source.crowdstrike-cql meta.case.cql string.unquoted.wildcard.cql
+#     ^ source.crowdstrike-cql meta.case.cql
+#      ^ source.crowdstrike-cql meta.case.cql keyword.control.pipe.cql
+#       ^ source.crowdstrike-cql meta.case.cql
+#        ^^^^^^^^ source.crowdstrike-cql meta.case.cql meta.assignment.cql variable.other.property.cql
+#                ^ source.crowdstrike-cql meta.case.cql meta.assignment.cql
+#                 ^^ source.crowdstrike-cql meta.case.cql meta.assignment.cql keyword.operator.assignment.cql
+#                   ^ source.crowdstrike-cql meta.case.cql meta.assignment.cql
+#                    ^ source.crowdstrike-cql meta.case.cql meta.assignment.cql string.quoted.double.cql punctuation.definition.string.begin.cql
+#                     ^^^ source.crowdstrike-cql meta.case.cql meta.assignment.cql string.quoted.double.cql
+#                        ^ source.crowdstrike-cql meta.case.cql meta.assignment.cql string.quoted.double.cql punctuation.definition.string.end.cql
+>  }
+#^^ source.crowdstrike-cql meta.case.cql
+#  ^ source.crowdstrike-cql meta.case.cql punctuation.section.block.end.cql
+>| ParentBaseFileName match {
+#^ source.crowdstrike-cql keyword.control.pipe.cql
+# ^ source.crowdstrike-cql
+#  ^^^^^^^^^^^^^^^^^^ source.crowdstrike-cql meta.match.cql variable.other.property.cql
+#                    ^ source.crowdstrike-cql meta.match.cql
+#                     ^^^^^ source.crowdstrike-cql meta.match.cql keyword.control.match.cql
+#                          ^ source.crowdstrike-cql meta.match.cql
+#                           ^ source.crowdstrike-cql meta.match.cql punctuation.section.block.begin.cql
+>    "explorer.exe" => parentType := "interactive" ;
+#^^^^ source.crowdstrike-cql meta.match.cql
+#    ^ source.crowdstrike-cql meta.match.cql string.quoted.double.cql punctuation.definition.string.begin.cql
+#     ^^^^^^^^^^^^ source.crowdstrike-cql meta.match.cql string.quoted.double.cql
+#                 ^ source.crowdstrike-cql meta.match.cql string.quoted.double.cql punctuation.definition.string.end.cql
+#                  ^ source.crowdstrike-cql meta.match.cql
+#                   ^^ source.crowdstrike-cql meta.match.cql keyword.operator.arrow.cql
+#                     ^ source.crowdstrike-cql meta.match.cql
+#                      ^^^^^^^^^^ source.crowdstrike-cql meta.match.cql meta.assignment.cql variable.other.property.cql
+#                                ^ source.crowdstrike-cql meta.match.cql meta.assignment.cql
+#                                 ^^ source.crowdstrike-cql meta.match.cql meta.assignment.cql keyword.operator.assignment.cql
+#                                   ^ source.crowdstrike-cql meta.match.cql meta.assignment.cql
+#                                    ^ source.crowdstrike-cql meta.match.cql meta.assignment.cql string.quoted.double.cql punctuation.definition.string.begin.cql
+#                                     ^^^^^^^^^^^ source.crowdstrike-cql meta.match.cql meta.assignment.cql string.quoted.double.cql
+#                                                ^ source.crowdstrike-cql meta.match.cql meta.assignment.cql string.quoted.double.cql punctuation.definition.string.end.cql
+#                                                 ^ source.crowdstrike-cql meta.match.cql meta.assignment.cql
+#                                                  ^ source.crowdstrike-cql meta.match.cql punctuation.terminator.statement.cql
+>    /^(winword|excel)\.exe$/i => parentType := "office" ;
+#^^^^ source.crowdstrike-cql meta.match.cql
+#    ^ source.crowdstrike-cql meta.match.cql string.regexp.cql punctuation.definition.string.begin.regexp.cql
+#     ^ source.crowdstrike-cql meta.match.cql string.regexp.cql keyword.control.anchor.regexp.cql
+#      ^ source.crowdstrike-cql meta.match.cql string.regexp.cql punctuation.definition.group.regexp.cql
+#       ^^^^^^^ source.crowdstrike-cql meta.match.cql string.regexp.cql
+#              ^ source.crowdstrike-cql meta.match.cql string.regexp.cql keyword.operator.or.regexp.cql
+#               ^^^^^ source.crowdstrike-cql meta.match.cql string.regexp.cql
+#                    ^ source.crowdstrike-cql meta.match.cql string.regexp.cql punctuation.definition.group.regexp.cql
+#                     ^^ source.crowdstrike-cql meta.match.cql string.regexp.cql constant.character.escape.backslash.regexp.cql
+#                       ^^^ source.crowdstrike-cql meta.match.cql string.regexp.cql
+#                          ^ source.crowdstrike-cql meta.match.cql string.regexp.cql keyword.control.anchor.regexp.cql
+#                           ^ source.crowdstrike-cql meta.match.cql string.regexp.cql punctuation.definition.string.end.regexp.cql
+#                            ^ source.crowdstrike-cql meta.match.cql string.regexp.cql keyword.other.flag.regexp.cql
+#                             ^ source.crowdstrike-cql meta.match.cql
+#                              ^^ source.crowdstrike-cql meta.match.cql keyword.operator.arrow.cql
+#                                ^ source.crowdstrike-cql meta.match.cql
+#                                 ^^^^^^^^^^ source.crowdstrike-cql meta.match.cql meta.assignment.cql variable.other.property.cql
+#                                           ^ source.crowdstrike-cql meta.match.cql meta.assignment.cql
+#                                            ^^ source.crowdstrike-cql meta.match.cql meta.assignment.cql keyword.operator.assignment.cql
+#                                              ^ source.crowdstrike-cql meta.match.cql meta.assignment.cql
+#                                               ^ source.crowdstrike-cql meta.match.cql meta.assignment.cql string.quoted.double.cql punctuation.definition.string.begin.cql
+#                                                ^^^^^^ source.crowdstrike-cql meta.match.cql meta.assignment.cql string.quoted.double.cql
+#                                                      ^ source.crowdstrike-cql meta.match.cql meta.assignment.cql string.quoted.double.cql punctuation.definition.string.end.cql
+#                                                       ^ source.crowdstrike-cql meta.match.cql meta.assignment.cql
+#                                                        ^ source.crowdstrike-cql meta.match.cql punctuation.terminator.statement.cql
+>    * => parentType := "other"
+#^^^^ source.crowdstrike-cql meta.match.cql
+#    ^ source.crowdstrike-cql meta.match.cql string.unquoted.wildcard.cql
+#     ^ source.crowdstrike-cql meta.match.cql
+#      ^^ source.crowdstrike-cql meta.match.cql keyword.operator.arrow.cql
+#        ^ source.crowdstrike-cql meta.match.cql
+#         ^^^^^^^^^^ source.crowdstrike-cql meta.match.cql meta.assignment.cql variable.other.property.cql
+#                   ^ source.crowdstrike-cql meta.match.cql meta.assignment.cql
+#                    ^^ source.crowdstrike-cql meta.match.cql meta.assignment.cql keyword.operator.assignment.cql
+#                      ^ source.crowdstrike-cql meta.match.cql meta.assignment.cql
+#                       ^ source.crowdstrike-cql meta.match.cql meta.assignment.cql string.quoted.double.cql punctuation.definition.string.begin.cql
+#                        ^^^^^ source.crowdstrike-cql meta.match.cql meta.assignment.cql string.quoted.double.cql
+#                             ^ source.crowdstrike-cql meta.match.cql meta.assignment.cql string.quoted.double.cql punctuation.definition.string.end.cql
+>  }
+#^^ source.crowdstrike-cql meta.match.cql
+#  ^ source.crowdstrike-cql meta.match.cql punctuation.section.block.end.cql
+>| $"Known False Positives"(tenant="corp")
+#^ source.crowdstrike-cql keyword.control.pipe.cql
+# ^ source.crowdstrike-cql
+#  ^ source.crowdstrike-cql meta.saved-query.cql punctuation.definition.saved-query.cql
+#   ^^^^^^^^^^^^^^^^^^^^^^^ source.crowdstrike-cql meta.saved-query.cql entity.name.function.saved-query.cql
+#                          ^ source.crowdstrike-cql meta.saved-query.cql punctuation.definition.arguments.begin.cql
+#                           ^^^^^^ source.crowdstrike-cql meta.saved-query.cql variable.parameter.cql
+#                                 ^ source.crowdstrike-cql meta.saved-query.cql keyword.operator.assignment.argument.cql
+#                                  ^ source.crowdstrike-cql meta.saved-query.cql string.quoted.double.cql punctuation.definition.string.begin.cql
+#                                   ^^^^ source.crowdstrike-cql meta.saved-query.cql string.quoted.double.cql
+#                                       ^ source.crowdstrike-cql meta.saved-query.cql string.quoted.double.cql punctuation.definition.string.end.cql
+#                                        ^ source.crowdstrike-cql meta.saved-query.cql punctuation.definition.arguments.end.cql
+>| groupBy([aid, ComputerName], function=[count(as=executions), max(entropy, as=maxEntropy), collect([CommandLine], limit=5)])
+#^ source.crowdstrike-cql keyword.control.pipe.cql
+# ^ source.crowdstrike-cql
+#  ^^^^^^^ source.crowdstrike-cql meta.function-call.cql entity.name.function.cql
+#         ^ source.crowdstrike-cql meta.function-call.cql punctuation.definition.arguments.begin.cql
+#          ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql punctuation.section.array.begin.cql
+#           ^^^ source.crowdstrike-cql meta.function-call.cql meta.array.cql variable.other.cql
+#              ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql punctuation.separator.comma.cql
+#               ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql
+#                ^^^^^^^^^^^^ source.crowdstrike-cql meta.function-call.cql meta.array.cql variable.other.cql
+#                            ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql punctuation.section.array.end.cql
+#                             ^ source.crowdstrike-cql meta.function-call.cql punctuation.separator.comma.cql
+#                              ^ source.crowdstrike-cql meta.function-call.cql
+#                               ^^^^^^^^ source.crowdstrike-cql meta.function-call.cql variable.parameter.cql
+#                                       ^ source.crowdstrike-cql meta.function-call.cql keyword.operator.assignment.argument.cql
+#                                        ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql punctuation.section.array.begin.cql
+#                                         ^^^^^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql entity.name.function.cql
+#                                              ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql punctuation.definition.arguments.begin.cql
+#                                               ^^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql variable.parameter.cql
+#                                                 ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql keyword.operator.assignment.argument.cql
+#                                                  ^^^^^^^^^^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql variable.other.cql
+#                                                            ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql punctuation.definition.arguments.end.cql
+#                                                             ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql punctuation.separator.comma.cql
+#                                                              ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql
+#                                                               ^^^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql entity.name.function.cql
+#                                                                  ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql punctuation.definition.arguments.begin.cql
+#                                                                   ^^^^^^^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql variable.other.cql
+#                                                                          ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql punctuation.separator.comma.cql
+#                                                                           ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql
+#                                                                            ^^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql variable.parameter.cql
+#                                                                              ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql keyword.operator.assignment.argument.cql
+#                                                                               ^^^^^^^^^^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql variable.other.cql
+#                                                                                         ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql punctuation.definition.arguments.end.cql
+#                                                                                          ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql punctuation.separator.comma.cql
+#                                                                                           ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql
+#                                                                                            ^^^^^^^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql entity.name.function.cql
+#                                                                                                   ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql punctuation.definition.arguments.begin.cql
+#                                                                                                    ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql meta.array.cql punctuation.section.array.begin.cql
+#                                                                                                     ^^^^^^^^^^^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql meta.array.cql variable.other.cql
+#                                                                                                                ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql meta.array.cql punctuation.section.array.end.cql
+#                                                                                                                 ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql punctuation.separator.comma.cql
+#                                                                                                                  ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql
+#                                                                                                                   ^^^^^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql variable.parameter.cql
+#                                                                                                                        ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql keyword.operator.assignment.argument.cql
+#                                                                                                                         ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql constant.numeric.cql
+#                                                                                                                          ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql meta.function-call.cql punctuation.definition.arguments.end.cql
+#                                                                                                                           ^ source.crowdstrike-cql meta.function-call.cql meta.array.cql punctuation.section.array.end.cql
+#                                                                                                                            ^ source.crowdstrike-cql meta.function-call.cql punctuation.definition.arguments.end.cql
+>| executions > 1
+#^ source.crowdstrike-cql keyword.control.pipe.cql
+# ^ source.crowdstrike-cql
+#  ^^^^^^^^^^ source.crowdstrike-cql meta.comparison.cql variable.other.property.cql
+#            ^ source.crowdstrike-cql meta.comparison.cql
+#             ^ source.crowdstrike-cql meta.comparison.cql keyword.operator.comparison.cql
+#              ^ source.crowdstrike-cql meta.comparison.cql
+#               ^ source.crowdstrike-cql meta.comparison.cql constant.numeric.cql
+>| sort(maxEntropy, order=desc, limit=50)
+#^ source.crowdstrike-cql keyword.control.pipe.cql
+# ^ source.crowdstrike-cql
+#  ^^^^ source.crowdstrike-cql meta.function-call.cql entity.name.function.cql
+#      ^ source.crowdstrike-cql meta.function-call.cql punctuation.definition.arguments.begin.cql
+#       ^^^^^^^^^^ source.crowdstrike-cql meta.function-call.cql variable.other.cql
+#                 ^ source.crowdstrike-cql meta.function-call.cql punctuation.separator.comma.cql
+#                  ^ source.crowdstrike-cql meta.function-call.cql
+#                   ^^^^^ source.crowdstrike-cql meta.function-call.cql variable.parameter.cql
+#                        ^ source.crowdstrike-cql meta.function-call.cql keyword.operator.assignment.argument.cql
+#                         ^^^^ source.crowdstrike-cql meta.function-call.cql variable.other.cql
+#                             ^ source.crowdstrike-cql meta.function-call.cql punctuation.separator.comma.cql
+#                              ^ source.crowdstrike-cql meta.function-call.cql
+#                               ^^^^^ source.crowdstrike-cql meta.function-call.cql variable.parameter.cql
+#                                    ^ source.crowdstrike-cql meta.function-call.cql keyword.operator.assignment.argument.cql
+#                                     ^^ source.crowdstrike-cql meta.function-call.cql constant.numeric.cql
+#                                       ^ source.crowdstrike-cql meta.function-call.cql punctuation.definition.arguments.end.cql
+>| formatTime("%Y-%m-%d %H:%M:%S", field=@timestamp, as=firstSeen, timezone="UTC") // last step
+#^ source.crowdstrike-cql keyword.control.pipe.cql
+# ^ source.crowdstrike-cql
+#  ^^^^^^^^^^ source.crowdstrike-cql meta.function-call.cql entity.name.function.cql
+#            ^ source.crowdstrike-cql meta.function-call.cql punctuation.definition.arguments.begin.cql
+#             ^ source.crowdstrike-cql meta.function-call.cql string.quoted.double.cql punctuation.definition.string.begin.cql
+#              ^^^^^^^^^^^^^^^^^ source.crowdstrike-cql meta.function-call.cql string.quoted.double.cql
+#                               ^ source.crowdstrike-cql meta.function-call.cql string.quoted.double.cql punctuation.definition.string.end.cql
+#                                ^ source.crowdstrike-cql meta.function-call.cql punctuation.separator.comma.cql
+#                                 ^ source.crowdstrike-cql meta.function-call.cql
+#                                  ^^^^^ source.crowdstrike-cql meta.function-call.cql variable.parameter.cql
+#                                       ^ source.crowdstrike-cql meta.function-call.cql keyword.operator.assignment.argument.cql
+#                                        ^^^^^^^^^^ source.crowdstrike-cql meta.function-call.cql variable.language.cql
+#                                                  ^ source.crowdstrike-cql meta.function-call.cql punctuation.separator.comma.cql
+#                                                   ^ source.crowdstrike-cql meta.function-call.cql
+#                                                    ^^ source.crowdstrike-cql meta.function-call.cql variable.parameter.cql
+#                                                      ^ source.crowdstrike-cql meta.function-call.cql keyword.operator.assignment.argument.cql
+#                                                       ^^^^^^^^^ source.crowdstrike-cql meta.function-call.cql variable.other.cql
+#                                                                ^ source.crowdstrike-cql meta.function-call.cql punctuation.separator.comma.cql
+#                                                                 ^ source.crowdstrike-cql meta.function-call.cql
+#                                                                  ^^^^^^^^ source.crowdstrike-cql meta.function-call.cql variable.parameter.cql
+#                                                                          ^ source.crowdstrike-cql meta.function-call.cql keyword.operator.assignment.argument.cql
+#                                                                           ^ source.crowdstrike-cql meta.function-call.cql string.quoted.double.cql punctuation.definition.string.begin.cql
+#                                                                            ^^^ source.crowdstrike-cql meta.function-call.cql string.quoted.double.cql
+#                                                                               ^ source.crowdstrike-cql meta.function-call.cql string.quoted.double.cql punctuation.definition.string.end.cql
+#                                                                                ^ source.crowdstrike-cql meta.function-call.cql punctuation.definition.arguments.end.cql
+#                                                                                 ^ source.crowdstrike-cql
+#                                                                                  ^^ source.crowdstrike-cql comment.line.double-slash.cql punctuation.definition.comment.cql
+#                                                                                    ^^^^^^^^^^ source.crowdstrike-cql comment.line.double-slash.cql
+>

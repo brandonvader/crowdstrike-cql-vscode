@@ -1,0 +1,24 @@
+/* Suspicious encoded PowerShell, grouped per host.
+   Demonstrates most CQL syntax. */
+#event_simpleName=ProcessRollup2 event_platform=Win
+| ImageFileName=/\\powershell(_ise)?\.exe$/i
+| CommandLine=/\s-(e|enc|encodedcommand)\s/i OR CommandLine="*FromBase64String*"
+| not in(field="UserName", values=["SYSTEM", "LOCAL SERVICE"])
+| aid =~ !in(values=[?excluded_aid])
+| cmdLength := length(CommandLine)
+| entropy := shannonEntropy(CommandLine)
+| case {
+    entropy > 5.5 | severity := "high" ;
+    cmdLength >= 1000 | severity := "medium" ;
+    * | severity := "low"
+  }
+| ParentBaseFileName match {
+    "explorer.exe" => parentType := "interactive" ;
+    /^(winword|excel)\.exe$/i => parentType := "office" ;
+    * => parentType := "other"
+  }
+| $"Known False Positives"(tenant="corp")
+| groupBy([aid, ComputerName], function=[count(as=executions), max(entropy, as=maxEntropy), collect([CommandLine], limit=5)])
+| executions > 1
+| sort(maxEntropy, order=desc, limit=50)
+| formatTime("%Y-%m-%d %H:%M:%S", field=@timestamp, as=firstSeen, timezone="UTC") // last step

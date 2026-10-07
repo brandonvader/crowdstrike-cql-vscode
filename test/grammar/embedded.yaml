@@ -1,0 +1,32 @@
+# SYNTAX TEST "source.yaml" "CQL under queryString keys in YAML"
+
+name: Encoded PowerShell
+queryString: |
+  #event_simpleName=ProcessRollup2
+# ^^^^^^^^^^^^^^^^^ entity.name.tag.cql
+  | groupBy([aid])
+# ^ keyword.control.pipe.cql
+#   ^^^^^^^ entity.name.function.cql
+description: back to plain YAML
+# <----------- - variable.other.property.cql
+
+alert:
+  queryString: >-
+    user=admin
+#   ^^^^ variable.other.property.cql
+#        ^^^^^ string.unquoted.cql
+
+  timeWindow: 1h
+# ^^^^^^^^^^ - variable.other.property.cql
+
+queryString: "#repo=base_sensor | count()"
+#             ^^^^^ entity.name.tag.cql
+#                                 ^^^^^ entity.name.function.cql
+queryString: '#repo=x'
+#             ^^^^^ entity.name.tag.cql
+queryString: count() | x := 1
+#            ^^^^^ entity.name.function.cql
+#                      ^ variable.other.property.cql
+
+notTheKey: count()
+#          ^^^^^ - entity.name.function.cql

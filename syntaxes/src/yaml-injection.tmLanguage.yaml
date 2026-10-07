@@ -1,0 +1,79 @@
+# Highlights CQL embedded in YAML under known query keys (LogScale packages,
+# alerts and scheduled searches use `queryString`).
+#
+#   queryString: |            block scalar (| or >, with optional modifiers)
+#     #event_simpleName=...
+#   queryString: "..."        double-quoted, single line
+#   queryString: '...'        single-quoted, single line
+#   queryString: foo | bar    plain scalar, single line
+#
+# Known limitation: block content is assumed to end at the first non-blank
+# line indented no deeper than the key's line. For `- queryString: |` the
+# sibling keys of that list item are indented deeper than the `-`, so they
+# are swallowed; use `queryString` on its own line to avoid this.
+
+scopeName: yaml.crowdstrike-cql.injection
+injectionSelector: 'L:source.yaml -comment'
+
+variables:
+  keys: '(?:queryString)'
+
+patterns:
+  - include: '#block-scalar'
+  - include: '#double-quoted'
+  - include: '#single-quoted'
+  - include: '#plain'
+
+repository:
+  block-scalar:
+    begin: '^(\s*)(?:-\s+)?({{keys}})\s*(:)\s*(?:([|>])([1-9])?([-+])?|([-+])([1-9])?([|>]))\s*(#.*)?$'
+    beginCaptures:
+      '2': { name: entity.name.tag.yaml }
+      '3': { name: punctuation.separator.key-value.mapping.yaml }
+      '4': { name: keyword.control.flow.block-scalar.yaml }
+      '5': { name: constant.numeric.indentation-indicator.yaml }
+      '6': { name: storage.modifier.chomping-indicator.yaml }
+      '7': { name: storage.modifier.chomping-indicator.yaml }
+      '8': { name: constant.numeric.indentation-indicator.yaml }
+      '9': { name: keyword.control.flow.block-scalar.yaml }
+      '10': { name: comment.line.number-sign.yaml }
+    end: '^(?!\s*$)(?!\1\s)'
+    contentName: meta.embedded.block.crowdstrike-cql
+    patterns:
+      - include: source.crowdstrike-cql
+
+  double-quoted:
+    begin: '(?<=^|\s|-\s)({{keys}})\s*(:)\s*(")'
+    beginCaptures:
+      '1': { name: entity.name.tag.yaml }
+      '2': { name: punctuation.separator.key-value.mapping.yaml }
+      '3': { name: punctuation.definition.string.begin.yaml }
+    end: '(?<!\\)(")|$'
+    endCaptures:
+      '1': { name: punctuation.definition.string.end.yaml }
+    contentName: meta.embedded.inline.crowdstrike-cql
+    patterns:
+      - include: source.crowdstrike-cql
+
+  single-quoted:
+    begin: "(?<=^|\\s|-\\s)({{keys}})\\s*(:)\\s*(')"
+    beginCaptures:
+      '1': { name: entity.name.tag.yaml }
+      '2': { name: punctuation.separator.key-value.mapping.yaml }
+      '3': { name: punctuation.definition.string.begin.yaml }
+    end: "(')(?!')|$"
+    endCaptures:
+      '1': { name: punctuation.definition.string.end.yaml }
+    contentName: meta.embedded.inline.crowdstrike-cql
+    patterns:
+      - include: source.crowdstrike-cql
+
+  plain:
+    begin: '(?<=^|\s|-\s)({{keys}})\s*(:)\s+(?=[^\s|>"''#])'
+    beginCaptures:
+      '1': { name: entity.name.tag.yaml }
+      '2': { name: punctuation.separator.key-value.mapping.yaml }
+    end: '$'
+    contentName: meta.embedded.inline.crowdstrike-cql
+    patterns:
+      - include: source.crowdstrike-cql
