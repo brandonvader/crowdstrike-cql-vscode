@@ -175,6 +175,7 @@ it in the web worker host, as on vscode.dev.
   the corpus cache), then `npm run catalog`, then `npm test`.
 - `grammar/tree-sitter-crowdstrike_cql.wasm` is vendored; see
   [`grammar/README.md`](grammar/README.md) to rebuild or update it.
+- `images/icon.png` is drawn by `python3 -I scripts/make-icon.py` (Pillow).
 
 - Grammars are written in YAML under `syntaxes/src/`; `{{name}}` placeholders
   expand from the file's `variables` map. The build compiles every regex
