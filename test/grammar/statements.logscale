@@ -1,0 +1,77 @@
+// SYNTAX TEST "source.crowdstrike-cql" "case, match, saved queries, parameters, correlate"
+
+| case {
+//^^^^ keyword.control.case.cql
+//     ^ punctuation.section.block.begin.cql
+    entropy > 5.5 | severity := "high" ;
+//  ^^^^^^^ variable.other.property.cql
+//                  ^^^^^^^^ variable.other.property.cql
+//                                     ^ punctuation.terminator.statement.cql
+    * | severity := "low"
+//  ^ string.unquoted.wildcard.cql
+  }
+//^ punctuation.section.block.end.cql
+
+| ParentBaseFileName match {
+//^^^^^^^^^^^^^^^^^^ variable.other.property.cql
+//                   ^^^^^ keyword.control.match.cql
+    "explorer.exe" => parentType := "interactive" ;
+//  ^^^^^^^^^^^^^^ string.quoted.double.cql
+//                 ^^ keyword.operator.arrow.cql
+//                    ^^^^^^^^^^ variable.other.property.cql
+    /^(winword|excel)\.exe$/i => parentType := "office" ;
+//  ^^^^^^^^^^^^^^^^^^^^^^^^^ string.regexp.cql
+//                            ^^ keyword.operator.arrow.cql
+    cmd => parentType := "shell" ;
+//  ^^^ string.unquoted.cql
+    * => parentType := "other"
+//  ^ string.unquoted.wildcard.cql
+//    ^^ keyword.operator.arrow.cql
+  }
+
+// match() the function is not the match statement.
+| match(file="lookup.csv", field=host)
+//^^^^^ entity.name.function.cql
+//      ^^^^ variable.parameter.cql
+
+| $"Known False Positives"(tenant="corp") | $my_saved_query()
+//^ punctuation.definition.saved-query.cql
+// ^^^^^^^^^^^^^^^^^^^^^^^ entity.name.function.saved-query.cql
+//                         ^^^^^^ variable.parameter.cql
+//                                           ^^^^^^^^^^^^^^ entity.name.function.saved-query.cql
+
+host = ?host | user = ?{user=*} | ?"quoted param" | x = ?{y="def"}
+//     ^ punctuation.definition.parameter.cql
+//      ^^^^ variable.other.constant.parameter.cql
+//                    ^^ punctuation.definition.parameter.begin.cql
+//                      ^^^^ variable.other.constant.parameter.cql
+//                           ^ string.unquoted.wildcard.cql
+//                            ^ punctuation.definition.parameter.end.cql
+//                                 ^^^^^^^^^^^^^^ variable.other.constant.parameter.cql
+//                                                          ^^^^^ string.quoted.double.cql
+
+correlate(
+  logon: {
+//^^^^^ entity.name.label.cql
+    #event_simpleName=UserLogon
+  } include: [*],
+//  ^^^^^^^ entity.other.attribute-name.cql
+  proc: {
+    #event_simpleName=ProcessRollup2
+    | aid <=> logon.aid
+//    ^^^ variable.other.property.cql
+//        ^^^ keyword.operator.comparison.cql
+//            ^^^^^^^^^ variable.other.property.cql
+  } include: [*],
+  sequence=false, within=5m
+//^^^^^^^^ variable.parameter.cql
+//                       ^^ constant.numeric.duration.cql
+)
+
+defineTable(name="t", query={#event_simpleName=ProcessRollup2}, include=[aid])
+//                          ^ punctuation.section.block.begin.cql
+//                           ^^^^^^^^^^^^^^^^^ entity.name.tag.cql
+//                                             ^^^^^^^^^^^^^^ string.unquoted.cql
+
+// #region hunt
+// <- comment.line.double-slash.cql

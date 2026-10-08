@@ -1,0 +1,79 @@
+// SYNTAX TEST "source.crowdstrike-cql" "filters, comparisons and free text"
+
+#event_simpleName=ProcessRollup2 event_platform=Win
+// <----------------- entity.name.tag.cql
+//               ^ keyword.operator.comparison.cql
+//                ^^^^^^^^^^^^^^ string.unquoted.cql
+//                               ^^^^^^^^^^^^^^ variable.other.property.cql
+//                                              ^^^ string.unquoted.cql
+
+// The right-hand side of a filter is a string, never a field.
+user=admin OR user=root
+//   ^^^^^ string.unquoted.cql
+//   ^^^^^ - variable
+//         ^^ keyword.operator.expression.or.cql
+//            ^^^^ variable.other.property.cql
+//                 ^^^^ string.unquoted.cql
+
+user = admin and not host = web-01
+//     ^^^^^ string.unquoted.cql
+//           ^^^ keyword.operator.expression.and.cql
+//               ^^^ keyword.operator.expression.not.cql
+//                          ^^^^^^ string.unquoted.cql
+
+@timestamp > 5 x <= 1.5 y != "" ip=8.8.8.8 t=5m
+// <---------- variable.language.cql
+//         ^ keyword.operator.comparison.cql
+//           ^ constant.numeric.cql
+//               ^^ keyword.operator.comparison.cql
+//                  ^^^ constant.numeric.cql
+//                        ^^ keyword.operator.comparison.cql
+//                           ^^ string.quoted.double.cql
+//                                 ^^^^^^^ constant.numeric.cql
+//                                           ^^ constant.numeric.duration.cql
+
+"host-name"=* repo.name=docker/* file=*.exe path=C:\Windows\*
+// <----------- variable.other.property.cql
+//          ^ string.unquoted.wildcard.cql
+//            ^^^^^^^^^ variable.other.property.cql
+//                      ^^^^^^^^ string.unquoted.cql
+//                                    ^^^^^ string.unquoted.cql
+//                                                ^^^^^^^^^^^^ string.unquoted.cql
+
+name like "adm*" foo[0].bar=x
+//   ^^^^ keyword.operator.expression.like.cql
+//        ^^^^^^ string.quoted.double.cql
+//               ^^^^^^^^^^ variable.other.property.cql
+
+// Free text: bare words and URLs are search terms; `//` after a space is a comment.
+https://www.example.com/ error "two words" // trailing
+// <------------------------ string.unquoted.cql
+//                       ^^^^^ string.unquoted.cql
+//                             ^^^^^^^^^^^ string.quoted.double.cql
+//                                         ^^^^^^^^^^^ comment.line.double-slash.cql
+
+// Filter values keep their slashes: this is a pattern, not division or a regex.
+foo=m/fisk/i
+//  ^^^^^^^^ string.unquoted.cql
+//  ^^^^^^^^ - string.regexp
+
+CommandLine=/\s-enc\s/i OR /mimikatz/ "a \"quoted\" word"
+//          ^ punctuation.definition.string.begin.regexp.cql
+//           ^^ constant.character.character-class.regexp.cql
+//                   ^ punctuation.definition.string.end.regexp.cql
+//                    ^ keyword.other.flag.regexp.cql
+//                         ^^^^^^^^^^ string.regexp.cql
+//                                       ^^ constant.character.escape.cql
+
+( a=1 OR b=2 ) c=3
+// <- punctuation.section.group.begin.cql
+//^ variable.other.property.cql
+//    ^^ keyword.operator.expression.or.cql
+//           ^ punctuation.section.group.end.cql
+//             ^ variable.other.property.cql
+
+/* block
+// ^^^^^ comment.block.cql
+   comment */ x=1
+// ^^^^^^^^^^ comment.block.cql
+//            ^ variable.other.property.cql

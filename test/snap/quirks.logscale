@@ -1,0 +1,15 @@
+aid =~ !in(values=[?excluded_aid])
+not in(field="UserName", values=["SYSTEM"])
+https://www.example.com/ foo=bar
+a := x / 2 + y / 3
+a:=m/fisk/i
+foo=m/fisk/i
+$"Known False Positives"(tenant="corp")
+cidr(RemoteAddressIP4, subnet=["10.0.0.0/8"])
+ParentBaseFileName match { * => x := 1 ; foo => y := 2 }
+| ?{host=*} | #repo=base_sensor
+user=admin OR user=root
+repo.name=docker/* "host-name"=* x > 5 ip=8.8.8.8 t=5m
+correlate(first: { #event_simpleName=UserLogon } include: [*], second: { aid <=> first.aid })
+[count(), max(x)] | groupBy(host, function=[{count() | esp:=_count/300}])
+foo // comment
