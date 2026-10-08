@@ -38,6 +38,16 @@ LogScale.
     `crowdstrike-cql` or `humio`
   - YAML values under `queryString:` (LogScale packages, alerts, scheduled
     searches), as block scalars (`|`, `>`), quoted or plain values
+- **Function completion, signature help and hover** for all 196 functions in
+  the CrowdStrike Query Language reference:
+  - function names wherever a function can go, with aggregate functions first
+    inside `groupBy(…, function=…)` and similar
+  - parameter names (required first, already-used ones left out) and allowed
+    values (`sort(order=` offers `desc`, `asc`), defaults first
+  - the active parameter while you type, with its type, default and values
+  - hover on a function or argument name for its signature and a link to its
+    documentation
+  - deprecated functions and parameters are marked and sorted last
 - **Semantic highlighting** from a real parser
   ([tree-sitter](https://tree-sitter.github.io/)): keeps fields, filter
   values and functions straight where a line-based grammar cannot, such as an
@@ -76,6 +86,16 @@ LogScale.
   | `ptree` | Markdown link to the Falcon process explorer |
   | `param` | Dashboard parameter with a default value |
   | `region` | Foldable region |
+
+## Function catalog
+
+The catalog (`src/catalog/functions.json`) holds facts from the
+[function reference](https://library.humio.com/crowdstrike-query-language/functions.html):
+names, signatures, function types, parameter names, types, defaults and
+allowed values. It does not copy the documentation's descriptions; hovers link
+to the page instead. Its `scraped` field gives the date of the snapshot.
+Functions CrowdStrike added later still highlight correctly but are not
+suggested until the catalog is refreshed.
 
 ## Privacy and footprint
 
@@ -151,6 +171,8 @@ it in the web worker host, as on vscode.dev.
   tree (no `vscode` import), unit-tested in `test/unit/`; `src/extension.ts`
   wires them to the VS Code API. esbuild bundles it twice, for the desktop
   (`dist/extension.js`) and the web (`dist/web/extension.js`).
+- To refresh the function catalog: `python3 scripts/scrape-docs.py` (fills
+  the corpus cache), then `npm run catalog`, then `npm test`.
 - `grammar/tree-sitter-crowdstrike_cql.wasm` is vendored; see
   [`grammar/README.md`](grammar/README.md) to rebuild or update it.
 

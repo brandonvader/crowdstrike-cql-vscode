@@ -100,6 +100,26 @@ check('selection ranges', async () => {
   assert.equal(doc.getText(sel.parent.range), '[aid, name]');
 });
 
+check('completion offers functions for a function-valued argument', async () => {
+  // Line 4 is `    function=count()`; column 13 is just after `function=`.
+  const list = await vscode.commands.executeCommand('vscode.executeCompletionItemProvider', doc.uri, new vscode.Position(4, 13), '=');
+  const labels = list.items.map((i) => (typeof i.label === 'string' ? i.label : i.label.label));
+  assert.ok(labels.includes('count'), labels.slice(0, 10).join(','));
+});
+
+check('signature help', async () => {
+  const help = await vscode.commands.executeCommand('vscode.executeSignatureHelpProvider', doc.uri, new vscode.Position(4, 13));
+  const sig = help.signatures[0];
+  assert.equal(sig.label, 'groupBy(field, [function], [limit])');
+  assert.deepEqual(sig.parameters[help.activeParameter].label, [16, 24]);
+});
+
+check('hover', async () => {
+  const [h] = await vscode.commands.executeCommand('vscode.executeHoverProvider', doc.uri, new vscode.Position(4, 15));
+  const md = h.contents.map((c) => c.value ?? c).join('\n');
+  assert.ok(md.includes('functions-count.html'), md);
+});
+
 check('syntax diagnostics are off by default and opt-in', async () => {
   const edit = new vscode.WorkspaceEdit();
   edit.insert(doc.uri, new vscode.Position(3, 4), '(');
