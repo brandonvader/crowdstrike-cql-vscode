@@ -4,6 +4,11 @@
   "description": "CrowdStrike Query Language (CQL / LogScale / NG-SIEM) support: function completion, signature help and hover, semantic highlighting, outline, folding, snippets, and queries embedded in Markdown and YAML.",
   "version": "0.1.0",
   "publisher": "brandonvader",
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#1E2330",
+    "theme": "dark"
+  },
   "author": {
     "name": "Brandon Vader",
     "email": "brandon@thetechpirate.net"
