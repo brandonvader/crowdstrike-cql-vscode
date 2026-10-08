@@ -1,7 +1,7 @@
 {
   "name": "crowdstrike-cql",
   "displayName": "CrowdStrike CQL",
-  "description": "CrowdStrike Query Language (CQL / LogScale / NG-SIEM) support: syntax highlighting, snippets, and queries embedded in Markdown and YAML.",
+  "description": "CrowdStrike Query Language (CQL / LogScale / NG-SIEM) support: function completion, signature help and hover, semantic highlighting, outline, folding, snippets, and queries embedded in Markdown and YAML.",
   "version": "0.1.0",
   "publisher": "brandonvader",
   "author": {
@@ -33,6 +33,9 @@
     "siem",
     "threat hunting"
   ],
+  "main": "./dist/extension.js",
+  "browser": "./dist/web/extension.js",
+  "activationEvents": [],
   "contributes": {
     "languages": [
       {
@@ -83,25 +86,130 @@
         "language": "crowdstrike-cql",
         "path": "./snippets/crowdstrike-cql.code-snippets"
       }
-    ]
+    ],
+    "semanticTokenTypes": [
+      {
+        "id": "tagField",
+        "superType": "property",
+        "description": "A #tag field"
+      },
+      {
+        "id": "metaField",
+        "superType": "variable",
+        "description": "An @metadata field"
+      },
+      {
+        "id": "pattern",
+        "superType": "string",
+        "description": "An unquoted filter value or free-text term"
+      },
+      {
+        "id": "wildcard",
+        "superType": "string",
+        "description": "A * wildcard"
+      },
+      {
+        "id": "savedQuery",
+        "superType": "function",
+        "description": "A $saved query call"
+      },
+      {
+        "id": "queryParameter",
+        "superType": "variable",
+        "description": "A ?parameter"
+      },
+      {
+        "id": "attribute",
+        "superType": "property",
+        "description": "A subquery attribute such as include:"
+      }
+    ],
+    "semanticTokenScopes": [
+      {
+        "language": "crowdstrike-cql",
+        "scopes": {
+          "property": [
+            "variable.other.property.cql"
+          ],
+          "variable": [
+            "variable.other.cql"
+          ],
+          "function": [
+            "entity.name.function.cql"
+          ],
+          "parameter": [
+            "variable.parameter.cql"
+          ],
+          "label": [
+            "entity.name.label.cql"
+          ],
+          "tagField": [
+            "entity.name.tag.cql"
+          ],
+          "metaField": [
+            "variable.language.cql"
+          ],
+          "pattern": [
+            "string.unquoted.cql"
+          ],
+          "wildcard": [
+            "string.unquoted.wildcard.cql"
+          ],
+          "savedQuery": [
+            "entity.name.function.saved-query.cql"
+          ],
+          "queryParameter": [
+            "variable.other.constant.parameter.cql"
+          ],
+          "attribute": [
+            "entity.other.attribute-name.cql"
+          ]
+        }
+      }
+    ],
+    "configuration": {
+      "title": "CrowdStrike CQL",
+      "properties": {
+        "crowdstrikeCql.diagnostics.syntax": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Show warnings where the query does not parse. The parser is lenient and does not know every quirk of the CrowdStrike parser, so a warning can be a false positive; the Falcon console is the authority."
+        }
+      }
+    }
   },
   "scripts": {
-    "build": "node scripts/build-grammars.mjs",
-    "test": "npm run build && npm run test:grammar && npm run test:snap && npm run test:snippets",
+    "build": "node scripts/build-grammars.mjs && node scripts/build-extension.mjs",
+    "test": "npm run build && npm run typecheck && npm run test:grammar && npm run test:snap && npm run test:snippets && npm run test:unit",
     "test:grammar": "vscode-tmgrammar-test -g test/fixtures/grammars/markdown.tmLanguage.json -g test/fixtures/grammars/yaml.tmLanguage.json -g test/fixtures/grammars/yaml-1.2.tmLanguage.json -g test/fixtures/grammars/yaml-1.3.tmLanguage.json -g test/fixtures/grammars/yaml-1.1.tmLanguage.json -g test/fixtures/grammars/yaml-1.0.tmLanguage.json -g test/fixtures/grammars/yaml-embedded.tmLanguage.json \"test/grammar/**/*.{logscale,md,yaml}\"",
     "test:snap": "vscode-tmgrammar-snap \"test/snap/*.logscale\"",
     "test:snippets": "node scripts/check-snippets.mjs",
-    "corpus:scopes": "npm run build && node scripts/corpus-scopes.mjs",
-    "package": "npm run build && vsce package",
-    "vscode:prepublish": "npm run build",
+    "corpus:scopes": "npm run build:grammars && node scripts/corpus-scopes.mjs",
+    "package": "vsce package",
+    "vscode:prepublish": "node scripts/build-grammars.mjs && node scripts/build-extension.mjs --minify",
     "test:snap:update": "vscode-tmgrammar-snap --updateSnapshot \"test/snap/*.logscale\"",
-    "screenshot": "xvfb-run -a -s \"-screen 0 1400x900x24\" node scripts/screenshot.mjs"
+    "screenshot": "xvfb-run -a -s \"-screen 0 1400x900x24\" node scripts/screenshot.mjs",
+    "build:grammars": "node scripts/build-grammars.mjs",
+    "watch": "node scripts/build-extension.mjs --watch",
+    "typecheck": "tsc -p .",
+    "test:unit": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test \"test/unit/**/*.test.ts\"",
+    "corpus:semantic": "npm run build:grammars && node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/corpus-semantic.mjs",
+    "test:integration": "node test/integration/run.mjs",
+    "catalog": "python3 -I scripts/extract-functions.py"
   },
   "devDependencies": {
+    "@types/node": "^24.19.1",
+    "@types/vscode": "1.95.0",
+    "@vscode/test-electron": "^3.1.0",
     "@vscode/vsce": "^4.0.0",
+    "esbuild": "^0.28.2",
     "js-yaml": "^5.4.3",
+    "typescript": "^7.0.2",
     "vscode-oniguruma": "^2.0.1",
     "vscode-textmate": "^9.3.2",
     "vscode-tmgrammar-test": "^0.1.3"
+  },
+  "dependencies": {
+    "web-tree-sitter": "^0.27.0"
   }
 }
