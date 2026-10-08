@@ -307,7 +307,8 @@ repository:
       - include: '#pipeline'
 
   attribute:
-    match: '\b([A-Za-z_]\w*)\s*(:)(?![=:])'
+    # not the namespace of a function call: array:exists(...)
+    match: '\b([A-Za-z_]\w*)\s*(:)(?![=:])(?![A-Za-z_]\w*\()'
     captures:
       '1': { name: entity.other.attribute-name.cql }
       '2': { name: punctuation.separator.key-value.cql }

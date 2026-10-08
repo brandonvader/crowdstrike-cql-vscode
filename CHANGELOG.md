@@ -11,3 +11,7 @@
 - Language configuration: comments, brackets, auto-closing pairs, indentation,
   region folding.
 - 25 snippets.
+- Tree-sitter layer (WebAssembly, no native code): semantic highlighting,
+  outline and breadcrumbs, syntax-aware folding, expand/shrink selection, and
+  opt-in syntax warnings (`crowdstrikeCql.diagnostics.syntax`).
+- Runs in VS Code for the Web as well as the desktop.

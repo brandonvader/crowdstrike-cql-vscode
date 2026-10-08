@@ -11,6 +11,17 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # The minimum in package.json `engines` (desktop host only: that
+        # version cannot load tests into its web worker host), and the
+        # current release (desktop and web worker hosts).
+        include:
+          - vscode: 1.95.0
+            hosts: desktop
+          - vscode: stable
+            hosts: desktop,web
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -19,9 +30,16 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
+      - name: Integration tests (VS Code ${{ matrix.vscode }})
+        run: xvfb-run -a npm run test:integration
+        env:
+          VSCODE_VERSION: ${{ matrix.vscode }}
+          CQL_IT_HOSTS: ${{ matrix.hosts }}
       - name: Package
+        if: matrix.vscode == 'stable'
         run: npx vsce package --out crowdstrike-cql.vsix
       - uses: actions/upload-artifact@v7
+        if: matrix.vscode == 'stable'
         with:
           name: vsix
           path: crowdstrike-cql.vsix
