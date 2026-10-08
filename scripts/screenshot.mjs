@@ -1,7 +1,8 @@
 // Screenshot VS Code with this extension loaded, headless under Xvfb.
 //
 //   xvfb-run -a -s "-screen 0 1400x900x24" node scripts/screenshot.mjs \
-//     --file examples/sample.logscale --out shot.png [--theme "Default Light Modern"]
+//     --file examples/sample.logscale --out shot.png [--theme "Default Light Modern"] \
+//     [--no-semantic]
 //
 // Launches VS Code (`code` on PATH, or $VSCODE_BIN) with a throwaway profile
 // and --remote-debugging-port, then captures the window through the Chrome
@@ -36,7 +37,7 @@ fs.writeFileSync(
     'window.restoreWindows': 'none',
     'editor.minimap.enabled': false,
     'editor.fontSize': 15,
-    'editor.semanticHighlighting.enabled': true,
+    'editor.semanticHighlighting.enabled': !args.includes('--no-semantic'),
     'security.workspace.trust.enabled': false,
     'telemetry.telemetryLevel': 'off',
     'update.mode': 'none',

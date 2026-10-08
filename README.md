@@ -38,9 +38,26 @@ LogScale.
     `crowdstrike-cql` or `humio`
   - YAML values under `queryString:` (LogScale packages, alerts, scheduled
     searches), as block scalars (`|`, `>`), quoted or plain values
+- **Semantic highlighting** from a real parser
+  ([tree-sitter](https://tree-sitter.github.io/)): keeps fields, filter
+  values and functions straight where a line-based grammar cannot, such as an
+  expression continued on the next line (`ratio := bytes_out` ⏎ `/ bytes_in`
+  is division, not a regex). It uses the same colors as the grammar.
+- **Outline, breadcrumbs and Go to Symbol** (`Ctrl+Shift+O`): every pipeline
+  stage (functions, assignments, saved queries), nested through `case`
+  branches, `match` arms and `correlate()` subqueries
+- **Folding** of multi-line function calls, arrays, subqueries, `case` and
+  `match` blocks, comment blocks and `// #region` … `// #endregion`
+- **Expand/shrink selection** by syntax (`Shift+Alt+→` / `Shift+Alt+←`)
+- **Optional syntax warnings**: set `"crowdstrikeCql.diagnostics.syntax": true`
+  to underline text the parser cannot read. Off by default: the parser is
+  lenient and does not know every quirk of CrowdStrike's own, so the Falcon
+  console stays the authority.
 - **Editing**: comment toggling (`//`, `/* */`), bracket matching and
-  colorization, auto-closing and surrounding pairs, indentation inside `()`,
-  `[]` and `{}`, and folding by brackets or `// #region` … `// #endregion`
+  colorization, auto-closing and surrounding pairs, and indentation inside
+  `()`, `[]` and `{}`
+- **Works in VS Code for the Web** (vscode.dev, github.dev) as well as the
+  desktop
 - **Snippets**:
 
   | Prefix | What |
@@ -59,6 +76,14 @@ LogScale.
   | `ptree` | Markdown link to the Falcon process explorer |
   | `param` | Dashboard parameter with a default value |
   | `region` | Foldable region |
+
+## Privacy and footprint
+
+The extension runs only inside VS Code's extension host: it makes **no
+network requests**, writes **no files** and starts **no processes**. The
+parser is WebAssembly bundled in the package (the
+[grammar](grammar/README.md) is built reproducibly from the companion Zed
+extension's source). Queries never leave the editor.
 
 ## Customizing colors
 
@@ -91,34 +116,43 @@ use `editor.tokenColorCustomizations`, for example:
 | `keyword.operator.expression.{and,or,not,like}.cql` | logical operators |
 
 Use **Developer: Inspect Editor Tokens and Scopes** to see the scopes of any
-token.
+token. Semantic tokens map onto the same scopes, so these rules apply to both;
+to see the grammar alone, set
+`"[crowdstrike-cql]": { "editor.semanticHighlighting.enabled": false }`.
 
 ## Known limitations
 
-TextMate grammars match one line at a time with regular expressions, so a few
-cases cannot be told apart reliably:
-
 - `https: //example.com` (space before `//`) is a comment; quote it.
 - An unterminated string or regex ends at the end of its line.
+- Semantic highlighting, the outline and folding apply to CQL files, not to
+  CQL embedded in Markdown or YAML (those use the grammar only).
 - YAML: for `- queryString: |` written on the list item's first line, the
   item's other keys are highlighted as CQL. Put `queryString` on its own line.
-
-A tree-sitter based layer (semantic highlighting, outline, folding) that
-corrects these is planned.
+- A pipeline stage that contains a syntax error keeps the grammar's colors
+  and is left out of the outline.
 
 ## Development
 
-Requirements: Node.js 20+.
+Requirements: Node.js 24 (unit tests run TypeScript directly).
 
 ```sh
 npm install
-npm test              # build grammars, scope tests, snapshots, snippet check
-npm run build         # syntaxes/src/*.yaml → syntaxes/*.json
+npm test              # build, typecheck, scope tests, snapshots, snippets, unit tests
+npm run build         # grammars (syntaxes/src → JSON) and bundles (src → dist)
+xvfb-run -a npm run test:integration   # real VS Code: desktop and web worker hosts
 npm run package       # → crowdstrike-cql-<version>.vsix
 ```
 
 Press **F5** in VS Code to launch an Extension Development Host with the
-extension loaded (works over Remote-SSH).
+extension loaded (works over Remote-SSH); the second launch configuration runs
+it in the web worker host, as on vscode.dev.
+
+- `src/core/` holds the tree-sitter features as plain functions over a syntax
+  tree (no `vscode` import), unit-tested in `test/unit/`; `src/extension.ts`
+  wires them to the VS Code API. esbuild bundles it twice, for the desktop
+  (`dist/extension.js`) and the web (`dist/web/extension.js`).
+- `grammar/tree-sitter-crowdstrike_cql.wasm` is vendored; see
+  [`grammar/README.md`](grammar/README.md) to rebuild or update it.
 
 - Grammars are written in YAML under `syntaxes/src/`; `{{name}}` placeholders
   expand from the file's `variables` map. The build compiles every regex
@@ -135,8 +169,10 @@ extension loaded (works over Remote-SSH).
   cut off at end of line). The corpus is not in this repository: it is
   CrowdStrike's documentation content. Point `CQL_CORPUS` at a directory with
   an `examples.jsonl` built by [`scripts/scrape-docs.py`](scripts/scrape-docs.py).
+- `npm run corpus:semantic` reports the tree-sitter parse rate on the same
+  corpus and every place where a semantic token disagrees with the grammar.
 
-The grammar follows the tree-sitter grammar of the companion
+The TextMate grammar follows the tree-sitter grammar of the companion
 [Zed extension](https://github.com/brandonvader/crowdstrike-cql-zed), which is
 derived from CrowdStrike's published
 [grammar subset](https://library.humio.com/lql-grammar/syntax-grammar-guide-subset.html).
@@ -147,4 +183,5 @@ Copyright (C) 2026 Brandon Vader
 
 Licensed under the GNU General Public License v3.0 (GPL-3.0-only); see
 [`LICENSE`](LICENSE). Anyone who distributes a modified version must release
-its source under the same license.
+its source under the same license. Bundled third-party software is listed in
+[`ThirdPartyNotices.txt`](ThirdPartyNotices.txt).

@@ -7,7 +7,7 @@
       "group": "build",
       "problemMatcher": [],
       "label": "npm: build",
-      "detail": "Compile syntaxes/src/*.yaml to JSON"
+      "detail": "Compile the grammars and bundle the extension"
     },
     {
       "type": "npm",

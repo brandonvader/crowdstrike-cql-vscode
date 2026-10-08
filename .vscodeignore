@@ -3,7 +3,12 @@
 !README.md
 !CHANGELOG.md
 !LICENSE
+!ThirdPartyNotices.txt
 !language-configuration.json
 !syntaxes/*.tmLanguage.json
 !snippets/**
+!grammar/*.wasm
+!dist/extension.js
+!dist/web/extension.js
+!dist/web-tree-sitter.wasm
 !images/icon.png

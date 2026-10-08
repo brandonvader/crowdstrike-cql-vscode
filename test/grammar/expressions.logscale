@@ -75,3 +75,7 @@ aid =~ !in(values=["a"]) | formatTime("%H:%M", field=@timestamp)
 //                                        ^^^^^^ variable.other.cql
 //                                              ^ keyword.operator.arithmetic.cql
 //                                               ^^^ constant.numeric.cql
+
+| x := array:filter(array="a[]", var=v, function=array:contains(array="b[]", value=v))
+//                                               ^^^^^^^^^^^^^^ entity.name.function.cql
+//                                               ^^^^^^^^^^^^^^ - entity.other.attribute-name.cql
