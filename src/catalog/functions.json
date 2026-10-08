@@ -1,0 +1,5930 @@
+{
+ "source": "https://library.humio.com/crowdstrike-query-language/functions.html",
+ "scraped": "2026-10-07",
+ "note": "Facts extracted from the CrowdStrike Query Language function reference; see the linked pages for documentation.",
+ "functions": [
+  {
+   "name": "accumulate",
+   "signature": "accumulate([current], function)",
+   "url": "functions-accumulate.html",
+   "kind": [
+    "Streaming"
+   ],
+   "params": [
+    {
+     "name": "current",
+     "type": "string",
+     "required": false,
+     "default": "include",
+     "values": [
+      "exclude",
+      "include"
+     ]
+    },
+    {
+     "name": "function",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "appendAggregation",
+   "signature": "appendAggregation(function)",
+   "url": "functions-appendaggregation.html",
+   "params": [
+    {
+     "name": "function",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "array:append",
+   "signature": "array:append(array, values)",
+   "url": "functions-array-append.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "array",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "values",
+     "type": "array of strings",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "array:contains",
+   "signature": "array:contains(array, value)",
+   "url": "functions-array-contains.html",
+   "kind": [
+    "Filter"
+   ],
+   "params": [
+    {
+     "name": "array",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "value",
+     "type": "string",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "array:dedup",
+   "signature": "array:dedup(array, [asArray])",
+   "url": "functions-array-dedup.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "array",
+     "type": "array",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "asArray",
+     "type": "string",
+     "required": false,
+     "default": "input array"
+    }
+   ]
+  },
+  {
+   "name": "array:drop",
+   "signature": "array:drop(array)",
+   "url": "functions-array-drop.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "array",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "array:eval",
+   "signature": "array:eval(array, [asArray], function, [var])",
+   "url": "functions-array-eval.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "array",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "asArray",
+     "type": "string",
+     "required": false,
+     "default": "value passed to the array parameter"
+    },
+    {
+     "name": "function",
+     "type": "non-aggregate function",
+     "required": true
+    },
+    {
+     "name": "var",
+     "type": "string",
+     "required": false,
+     "default": "input array name"
+    }
+   ]
+  },
+  {
+   "name": "array:exists",
+   "signature": "array:exists(array, condition, [var])",
+   "url": "functions-array-exists.html",
+   "kind": [
+    "Filter"
+   ],
+   "params": [
+    {
+     "name": "array",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "condition",
+     "type": "non-aggregate expression",
+     "required": true
+    },
+    {
+     "name": "var",
+     "type": "string",
+     "required": false,
+     "default": "input array name."
+    }
+   ]
+  },
+  {
+   "name": "array:filter",
+   "signature": "array:filter(array, [asArray], function, [var])",
+   "url": "functions-array-filter.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "array",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "asArray",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "function",
+     "type": "non-aggregate function",
+     "required": true
+    },
+    {
+     "name": "var",
+     "type": "string",
+     "required": false,
+     "default": "input array name"
+    }
+   ]
+  },
+  {
+   "name": "array:intersection",
+   "signature": "array:intersection(array, [as])",
+   "url": "functions-array-intersection.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "array",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_intersection"
+    }
+   ]
+  },
+  {
+   "name": "array:length",
+   "signature": "array:length(array, [as])",
+   "url": "functions-array-length.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "array",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_length"
+    }
+   ]
+  },
+  {
+   "name": "array:reduceAll",
+   "signature": "array:reduceAll(array, function, var)",
+   "url": "functions-array-reduceall.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "array",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "function",
+     "type": "array of aggregate functions",
+     "required": true
+    },
+    {
+     "name": "var",
+     "type": "string",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "array:reduceColumn",
+   "signature": "array:reduceColumn(array, [as], function, var)",
+   "url": "functions-array-reducecolumn.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "array",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_reduceColumn"
+    },
+    {
+     "name": "function",
+     "type": "array of aggregate functions",
+     "required": true
+    },
+    {
+     "name": "var",
+     "type": "string",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "array:reduceRow",
+   "signature": "array:reduceRow(array, [as], function, var)",
+   "url": "functions-array-reducerow.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "array",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_reduceRow"
+    },
+    {
+     "name": "function",
+     "type": "function",
+     "required": true
+    },
+    {
+     "name": "var",
+     "type": "string",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "array:regex",
+   "signature": "array:regex(array, [flags], regex)",
+   "url": "functions-array-regex.html",
+   "kind": [
+    "Filter"
+   ],
+   "params": [
+    {
+     "name": "array",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "flags",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "regex",
+     "type": "regex",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "array:rename",
+   "signature": "array:rename(array, asArray)",
+   "url": "functions-array-rename.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "array",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "asArray",
+     "type": "string",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "array:sort",
+   "signature": "array:sort(array, [asArray], [order], [type])",
+   "url": "functions-array-sort.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "array",
+     "type": "array name",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "asArray",
+     "type": "string",
+     "required": false,
+     "default": "input array"
+    },
+    {
+     "name": "order",
+     "type": "string",
+     "required": false,
+     "default": "asc",
+     "values": [
+      "ascending",
+      "descending"
+     ]
+    },
+    {
+     "name": "type",
+     "type": "string",
+     "required": false,
+     "default": "string",
+     "values": [
+      "number",
+      "string"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "array:union",
+   "signature": "array:union(array, [as])",
+   "url": "functions-array-union.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "array",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_union"
+    }
+   ]
+  },
+  {
+   "name": "asn",
+   "signature": "asn([as], [field])",
+   "url": "functions-asn.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "(input field)"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "ip",
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "avg",
+   "signature": "avg([as], field)",
+   "url": "functions-avg.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_avg"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "base64Decode",
+   "signature": "base64Decode([as], [charset], field)",
+   "url": "functions-base64decode.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_base64Decode"
+    },
+    {
+     "name": "charset",
+     "type": "string",
+     "required": false,
+     "default": "UTF-8",
+     "values": [
+      "ISO-8859-1",
+      "UTF-16BE",
+      "UTF-16LE",
+      "UTF-8"
+     ]
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "base64Encode",
+   "signature": "base64Encode([as], field)",
+   "url": "functions-base64encode.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_base64Encode"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "beta:param",
+   "signature": "beta:param(as, parameter)",
+   "url": "functions-beta-param.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "parameter",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "beta:repeating",
+   "signature": "beta:repeating([as], [interval])",
+   "url": "functions-beta-repeating.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "interval",
+     "type": "long",
+     "required": false,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "bitfield:extractFlags",
+   "signature": "bitfield:extractFlags(field, [onlyTrue], output)",
+   "url": "functions-bitfield-extractflags.html",
+   "params": [
+    {
+     "name": "field",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "onlyTrue",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "true"
+     ]
+    },
+    {
+     "name": "output",
+     "type": "array of arrays of strings",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "bitfield:extractFlagsAsArray",
+   "signature": "bitfield:extractFlagsAsArray([asArray], field, flagNames)",
+   "url": "functions-bitfield-extractflagsasarray.html",
+   "params": [
+    {
+     "name": "asArray",
+     "type": "string",
+     "required": false,
+     "default": "_flags[]"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "flagNames",
+     "type": "array of arrays of strings",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "bitfield:extractFlagsAsString",
+   "signature": "bitfield:extractFlagsAsString([as], field, flagNames, [separator])",
+   "url": "functions-bitfield-extractflagsasstring.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_flags"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "flagNames",
+     "type": "array of arrays of strings",
+     "required": true
+    },
+    {
+     "name": "separator",
+     "type": "string",
+     "required": false,
+     "default": "(space)"
+    }
+   ]
+  },
+  {
+   "name": "bucket",
+   "signature": "bucket([buckets], [field], [function], [limit], [minSpan], [span], [timezone], [unit])",
+   "url": "functions-bucket.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "buckets",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "field",
+     "type": "array of strings",
+     "required": false
+    },
+    {
+     "name": "function",
+     "type": "array of strings",
+     "required": false,
+     "default": "count(as=_count)"
+    },
+    {
+     "name": "limit",
+     "type": "integer",
+     "required": false,
+     "default": "10"
+    },
+    {
+     "name": "minSpan",
+     "type": "long",
+     "required": false
+    },
+    {
+     "name": "span",
+     "type": "string",
+     "required": false,
+     "default": "auto",
+     "unnamed": true
+    },
+    {
+     "name": "timezone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "unit",
+     "type": "array of strings",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "callFunction",
+   "signature": "callFunction([as], field, function)",
+   "url": "functions-callfunction.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_function"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "function",
+     "type": "string",
+     "required": true,
+     "unnamed": true,
+     "values": [
+      "avg",
+      "count",
+      "max",
+      "min",
+      "range",
+      "sum"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "cidr",
+   "signature": "cidr([column], field, [file], [negate], [subnet])",
+   "url": "functions-cidr.html",
+   "kind": [
+    "Filter"
+   ],
+   "params": [
+    {
+     "name": "column",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "file",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "negate",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "deprecated": true
+    },
+    {
+     "name": "subnet",
+     "type": "array of strings",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "coalesce",
+   "signature": "coalesce([as], expressions, [ignoreEmpty])",
+   "url": "functions-coalesce.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_coalesce"
+    },
+    {
+     "name": "expressions",
+     "type": "array of expressions",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "ignoreEmpty",
+     "type": "boolean",
+     "required": false,
+     "default": "true"
+    }
+   ]
+  },
+  {
+   "name": "collect",
+   "signature": "collect(fields, [limit], [multival], [separator])",
+   "url": "functions-collect.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "fields",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "limit",
+     "type": "integer",
+     "required": false,
+     "default": "2000"
+    },
+    {
+     "name": "multival",
+     "type": "boolean",
+     "required": false,
+     "default": "true",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "separator",
+     "type": "string",
+     "required": false,
+     "default": "\\n"
+    }
+   ]
+  },
+  {
+   "name": "communityId",
+   "signature": "communityId([as], destinationip, [destinationport], [icmpcode], [icmptype], proto, [seed], sourceip, [sourceport])",
+   "url": "functions-communityid.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_community_id"
+    },
+    {
+     "name": "destinationip",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "destinationport",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "icmpcode",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "icmptype",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "proto",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "seed",
+     "type": "integer",
+     "required": false,
+     "default": "0"
+    },
+    {
+     "name": "sourceip",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "sourceport",
+     "type": "string",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "concat",
+   "signature": "concat([as], field)",
+   "url": "functions-concat.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_concat"
+    },
+    {
+     "name": "field",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "concatArray",
+   "signature": "concatArray([as], field, [from], [prefix], [separator], [suffix], [to])",
+   "url": "functions-concatarray.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_concatArray"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "from",
+     "type": "integer",
+     "required": false,
+     "default": "0"
+    },
+    {
+     "name": "prefix",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "separator",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "suffix",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "to",
+     "type": "integer",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "copyEvent",
+   "signature": "copyEvent(type)",
+   "url": "functions-copyevent.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "type",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "correlate",
+   "signature": "correlate(aggregation, globalConstraints, includeConstraintValues, includeMatchesOnceOnly, iterationLimit, jitterTolerance, maxPerRoot, query, root, sequence, sequenceBy, within)",
+   "url": "functions-correlate.html",
+   "kind": [
+    "Aggregate",
+    "Multi-pass"
+   ],
+   "params": [
+    {
+     "name": "aggregation",
+     "type": "array",
+     "required": false
+    },
+    {
+     "name": "globalConstraints",
+     "type": "array of strings",
+     "required": false
+    },
+    {
+     "name": "includeConstraintValues",
+     "type": "boolean",
+     "required": false,
+     "default": "true",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "includeMatchesOnceOnly",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "iterationLimit",
+     "type": "integer",
+     "required": false,
+     "default": "5"
+    },
+    {
+     "name": "jitterTolerance",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "maxPerRoot",
+     "type": "integer",
+     "required": false,
+     "default": "1"
+    },
+    {
+     "name": "query",
+     "type": "query",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "root",
+     "type": "string",
+     "required": false,
+     "default": "first query"
+    },
+    {
+     "name": "sequence",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "sequenceBy",
+     "type": "array of strings",
+     "required": false
+    },
+    {
+     "name": "within",
+     "type": "string",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "count",
+   "signature": "count([as], [distinct], [field])",
+   "url": "functions-count.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_count"
+    },
+    {
+     "name": "distinct",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "counterAsRate",
+   "signature": "counterAsRate([as], field)",
+   "url": "functions-counterasrate.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_rate"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "createEvents",
+   "signature": "createEvents(rawstring)",
+   "url": "functions-createevents.html",
+   "kind": [
+    "Aggregate",
+    "Source"
+   ],
+   "params": [
+    {
+     "name": "rawstring",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "crypto:md5",
+   "signature": "crypto:md5([as], field)",
+   "url": "functions-crypto-md5.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_md5"
+    },
+    {
+     "name": "field",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "crypto:sha1",
+   "signature": "crypto:sha1([as], field)",
+   "url": "functions-crypto-sha1.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_sha1"
+    },
+    {
+     "name": "field",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "crypto:sha256",
+   "signature": "crypto:sha256([as], field)",
+   "url": "functions-crypto-sha256.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_sha256"
+    },
+    {
+     "name": "field",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "default",
+   "signature": "default(field, [replaceEmpty], value)",
+   "url": "functions-default.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "field",
+     "type": "array of strings",
+     "required": true
+    },
+    {
+     "name": "replaceEmpty",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "value",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "defineTable",
+   "signature": "defineTable([end], include, name, query, [start], [view])",
+   "url": "functions-definetable.html",
+   "kind": [
+    "Filter"
+   ],
+   "params": [
+    {
+     "name": "end",
+     "type": "string",
+     "required": false,
+     "default": "same as primary query"
+    },
+    {
+     "name": "include",
+     "type": "array of strings",
+     "required": true
+    },
+    {
+     "name": "name",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "query",
+     "type": "function",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "start",
+     "type": "string",
+     "required": false,
+     "default": "same as primary query"
+    },
+    {
+     "name": "view",
+     "type": "string",
+     "required": false,
+     "default": "same as primary query"
+    }
+   ]
+  },
+  {
+   "name": "drop",
+   "signature": "drop(fields)",
+   "url": "functions-drop.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "fields",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "dropEvent",
+   "signature": "dropEvent()",
+   "url": "functions-dropevent.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": []
+  },
+  {
+   "name": "duration",
+   "signature": "duration([as], duration)",
+   "url": "functions-duration.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_duration"
+    },
+    {
+     "name": "duration",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "end",
+   "signature": "end([as])",
+   "url": "functions-end.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_end",
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "eval",
+   "signature": "eval()",
+   "url": "functions-eval.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": []
+  },
+  {
+   "name": "eventFieldCount",
+   "signature": "eventFieldCount([as])",
+   "url": "functions-eventfieldcount.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_eventFieldCount"
+    }
+   ]
+  },
+  {
+   "name": "eventInternals",
+   "signature": "eventInternals([prefix])",
+   "url": "functions-eventinternals.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "prefix",
+     "type": "string",
+     "required": false,
+     "default": "@"
+    }
+   ]
+  },
+  {
+   "name": "eventSize",
+   "signature": "eventSize([as])",
+   "url": "functions-eventsize.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_eventSize"
+    }
+   ]
+  },
+  {
+   "name": "explain:asTable",
+   "signature": "explain:asTable([showPrefilters])",
+   "url": "functions-explain-astable.html",
+   "params": [
+    {
+     "name": "showPrefilters",
+     "type": "boolean",
+     "required": false,
+     "default": "true"
+    }
+   ]
+  },
+  {
+   "name": "fieldset",
+   "signature": "fieldset()",
+   "url": "functions-fieldset.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": []
+  },
+  {
+   "name": "fieldstats",
+   "signature": "fieldstats([limit])",
+   "url": "functions-fieldstats.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "limit",
+     "type": "integer",
+     "required": false,
+     "default": "200"
+    }
+   ]
+  },
+  {
+   "name": "findTimestamp",
+   "signature": "findTimestamp([addErrors], [as], [field], [timezone], [timezoneAs], [timezoneField])",
+   "url": "functions-findtimestamp.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "addErrors",
+     "type": "boolean",
+     "required": false,
+     "default": "true"
+    },
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "@timestamp"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@rawstring"
+    },
+    {
+     "name": "timezone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "timezoneAs",
+     "type": "string",
+     "required": false,
+     "default": "@timezone"
+    },
+    {
+     "name": "timezoneField",
+     "type": "string",
+     "required": false,
+     "default": "@timezone"
+    }
+   ]
+  },
+  {
+   "name": "format",
+   "signature": "format([as], field, format, [timezone])",
+   "url": "functions-format.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "deprecated": "1.58",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_format"
+    },
+    {
+     "name": "field",
+     "type": "array of strings",
+     "required": true
+    },
+    {
+     "name": "format",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "timezone",
+     "type": "string",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "formatDuration",
+   "signature": "formatDuration([as], field, [from], [precision])",
+   "url": "functions-formatduration.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "from",
+     "type": "long",
+     "required": false,
+     "default": "ms",
+     "values": [
+      "d",
+      "h",
+      "m",
+      "ms",
+      "ns",
+      "s",
+      "us"
+     ]
+    },
+    {
+     "name": "precision",
+     "type": "integer",
+     "required": false,
+     "default": "0"
+    }
+   ]
+  },
+  {
+   "name": "formatTime",
+   "signature": "formatTime(as, [field], format, [locale], [timezone], [unit])",
+   "url": "functions-formattime.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "field",
+     "type": "double",
+     "required": false,
+     "default": "@timestamp"
+    },
+    {
+     "name": "format",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "locale",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "timezone",
+     "type": "string",
+     "required": false,
+     "default": "UTC"
+    },
+    {
+     "name": "unit",
+     "type": "string",
+     "required": false,
+     "default": "auto",
+     "values": [
+      "auto",
+      "milliseconds",
+      "seconds"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "geography:distance",
+   "signature": "geography:distance([as], lat1, lat2, lon1, lon2)",
+   "url": "functions-geography-distance.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_distance"
+    },
+    {
+     "name": "lat1",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "lat2",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "lon1",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "lon2",
+     "type": "string",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "geohash",
+   "signature": "geohash([as], [lat], [lon], [precision])",
+   "url": "functions-geohash.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_geohash"
+    },
+    {
+     "name": "lat",
+     "type": "string",
+     "required": false,
+     "default": "ip.lat"
+    },
+    {
+     "name": "lon",
+     "type": "string",
+     "required": false,
+     "default": "ip.lon"
+    },
+    {
+     "name": "precision",
+     "type": "integer",
+     "required": false,
+     "default": "12"
+    }
+   ]
+  },
+  {
+   "name": "getField",
+   "signature": "getField([as], source)",
+   "url": "functions-getfield.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_getField"
+    },
+    {
+     "name": "source",
+     "type": "expression",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "groupBy",
+   "signature": "groupBy(field, [function], [limit])",
+   "url": "functions-groupby.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "field",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "function",
+     "type": "array of aggregate functions",
+     "required": false,
+     "default": "count(as=_count)"
+    },
+    {
+     "name": "limit",
+     "type": "integer",
+     "required": false,
+     "default": "20,000",
+     "values": [
+      "max"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "hash",
+   "signature": "hash([as], field, [limit], [seed])",
+   "url": "functions-hash.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_hash"
+    },
+    {
+     "name": "field",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "limit",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "seed",
+     "type": "string",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "hashMatch",
+   "signature": "hashMatch([bits], [field], [hash], input, salt)",
+   "url": "functions-hashmatch.html",
+   "kind": [
+    "Filter"
+   ],
+   "params": [
+    {
+     "name": "bits",
+     "type": "integer",
+     "required": false,
+     "default": "256"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "hash",
+     "type": "string",
+     "required": false,
+     "default": "sha256",
+     "values": [
+      "sha256",
+      "sha512"
+     ]
+    },
+    {
+     "name": "input",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "salt",
+     "type": "string",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "hashRewrite",
+   "signature": "hashRewrite([as], [bits], field, [hash], [replaceInRawstring], salt)",
+   "url": "functions-hashrewrite.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "bits",
+     "type": "integer",
+     "required": false,
+     "default": "256"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "hash",
+     "type": "string",
+     "required": false,
+     "default": "sha256",
+     "values": [
+      "sha256",
+      "sha512"
+     ]
+    },
+    {
+     "name": "replaceInRawstring",
+     "type": "boolean",
+     "required": false,
+     "default": "true"
+    },
+    {
+     "name": "salt",
+     "type": "string",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "head",
+   "signature": "head([limit])",
+   "url": "functions-head.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "limit",
+     "type": "integer",
+     "required": false,
+     "default": "200",
+     "unnamed": true,
+     "values": [
+      "max"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "if",
+   "signature": "if([as], condition, else, then)",
+   "url": "functions-if.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_if"
+    },
+    {
+     "name": "condition",
+     "type": "expression",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "else",
+     "type": "expression",
+     "required": true
+    },
+    {
+     "name": "then",
+     "type": "expression",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "in",
+   "signature": "in(field, [ignoreCase], values)",
+   "url": "functions-in.html",
+   "kind": [
+    "Filter"
+   ],
+   "params": [
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "ignoreCase",
+     "type": "boolean",
+     "required": false,
+     "default": "false"
+    },
+    {
+     "name": "values",
+     "type": "array of strings",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "ioc:lookup",
+   "signature": "ioc:lookup([confidenceThreshold], field, [include], [prefix], [strict], type)",
+   "url": "functions-ioc-lookup.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "confidenceThreshold",
+     "type": "string",
+     "required": false,
+     "default": "high",
+     "values": [
+      "unverified",
+      "low",
+      "medium",
+      "high"
+     ]
+    },
+    {
+     "name": "field",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "include",
+     "type": "array of strings",
+     "required": false,
+     "default": "All columns",
+     "values": [
+      "indicator",
+      "labels",
+      "last_updated",
+      "malicious_confidence",
+      "published_date",
+      "type"
+     ]
+    },
+    {
+     "name": "prefix",
+     "type": "string",
+     "required": false,
+     "default": "ioc"
+    },
+    {
+     "name": "strict",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "type",
+     "type": "string",
+     "required": true,
+     "values": [
+      "domain",
+      "ip_address",
+      "url"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "ipLocation",
+   "signature": "ipLocation([as], [field])",
+   "url": "functions-iplocation.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "ip",
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "join",
+   "signature": "join([end], field, [include], [key], [limit], [live], [max], [mode], query, [repo], [start], [view])",
+   "url": "functions-join.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "end",
+     "type": "string",
+     "required": false,
+     "default": "End of main query"
+    },
+    {
+     "name": "field",
+     "type": "array of strings",
+     "required": true
+    },
+    {
+     "name": "include",
+     "type": "array of strings",
+     "required": false,
+     "default": "none"
+    },
+    {
+     "name": "key",
+     "type": "array of strings",
+     "required": false
+    },
+    {
+     "name": "limit",
+     "type": "integer",
+     "required": false,
+     "default": "100000"
+    },
+    {
+     "name": "live",
+     "type": "boolean",
+     "required": false,
+     "default": "Same as main query"
+    },
+    {
+     "name": "max",
+     "type": "integer",
+     "required": false,
+     "default": "1"
+    },
+    {
+     "name": "mode",
+     "type": "string",
+     "required": false,
+     "default": "inner",
+     "values": [
+      "inner",
+      "left"
+     ]
+    },
+    {
+     "name": "query",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "repo",
+     "type": "string",
+     "required": false,
+     "default": "Repo of main query"
+    },
+    {
+     "name": "start",
+     "type": "string",
+     "required": false,
+     "default": "Start of main query"
+    },
+    {
+     "name": "view",
+     "type": "string",
+     "required": false,
+     "default": "View of main query"
+    }
+   ]
+  },
+  {
+   "name": "json:prettyPrint",
+   "signature": "json:prettyPrint([as], [field], [step], [strict])",
+   "url": "functions-json-prettyprint.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@rawstring",
+     "unnamed": true
+    },
+    {
+     "name": "step",
+     "type": "integer",
+     "required": false,
+     "default": "2"
+    },
+    {
+     "name": "strict",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "true"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "kvParse",
+   "signature": "kvParse([as], [excludeEmpty], [field], [onDuplicate], [override], [prefix], [separator], [separatorPadding])",
+   "url": "functions-kvparse.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "excludeEmpty",
+     "type": "array of strings",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "field",
+     "type": "array of strings",
+     "required": false,
+     "default": "@rawstring",
+     "unnamed": true
+    },
+    {
+     "name": "onDuplicate",
+     "type": "string",
+     "required": false,
+     "default": "keepLast",
+     "values": [
+      "keepFirst",
+      "keepLast"
+     ]
+    },
+    {
+     "name": "override",
+     "type": "boolean",
+     "required": false,
+     "default": "false"
+    },
+    {
+     "name": "prefix",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "separator",
+     "type": "string",
+     "required": false,
+     "default": "="
+    },
+    {
+     "name": "separatorPadding",
+     "type": "string",
+     "required": false,
+     "default": "unknown",
+     "values": [
+      "no",
+      "unknown",
+      "yes"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "length",
+   "signature": "length([as], field)",
+   "url": "functions-length.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_length"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "linReg",
+   "signature": "linReg([prefix], x, y)",
+   "url": "functions-linreg.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "prefix",
+     "type": "string",
+     "required": false,
+     "default": "_"
+    },
+    {
+     "name": "x",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "y",
+     "type": "string",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "lower",
+   "signature": "lower([as], field, [locale], [type])",
+   "url": "functions-lower.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_lower"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "locale",
+     "type": "string",
+     "required": false,
+     "default": "system locale"
+    },
+    {
+     "name": "type",
+     "type": "string",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "lowercase",
+   "signature": "lowercase(field, [include], [locale])",
+   "url": "functions-lowercase.html",
+   "kind": [
+    "Transformation"
+   ],
+   "deprecated": "Deprecated in Query Context",
+   "params": [
+    {
+     "name": "field",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "include",
+     "type": "string",
+     "required": false,
+     "default": "values",
+     "values": [
+      "both",
+      "fields",
+      "values"
+     ]
+    },
+    {
+     "name": "locale",
+     "type": "string",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "match",
+   "signature": "match([column], field, file, [glob], [ignoreCase], [include], [mode], [nrows], [strict])",
+   "url": "functions-match.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "column",
+     "type": "array of strings",
+     "required": false,
+     "default": "field parameter"
+    },
+    {
+     "name": "field",
+     "type": "array of strings",
+     "required": true
+    },
+    {
+     "name": "file",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "glob",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "deprecated": true
+    },
+    {
+     "name": "ignoreCase",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "include",
+     "type": "array of strings",
+     "required": false
+    },
+    {
+     "name": "mode",
+     "type": "string",
+     "required": false,
+     "default": "string",
+     "values": [
+      "cidr",
+      "glob",
+      "string"
+     ]
+    },
+    {
+     "name": "nrows",
+     "type": "integer",
+     "required": false,
+     "default": "1",
+     "values": [
+      "max"
+     ]
+    },
+    {
+     "name": "strict",
+     "type": "boolean",
+     "required": false,
+     "default": "true"
+    },
+    {
+     "name": "table",
+     "type": "string",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "matchAsArray",
+   "signature": "matchAsArray([asArray], [column], field, file, [ignoreCase], [include], nrows, [strict])",
+   "url": "functions-matchasarray.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "asArray",
+     "type": "string",
+     "required": false,
+     "default": "_now"
+    },
+    {
+     "name": "column",
+     "type": "array of strings",
+     "required": false,
+     "default": "field parameter"
+    },
+    {
+     "name": "field",
+     "type": "array of strings",
+     "required": true
+    },
+    {
+     "name": "file",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "ignoreCase",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "include",
+     "type": "array of strings",
+     "required": false
+    },
+    {
+     "name": "nrows",
+     "type": "integer",
+     "required": true
+    },
+    {
+     "name": "strict",
+     "type": "boolean",
+     "required": false,
+     "default": "true"
+    }
+   ]
+  },
+  {
+   "name": "math:abs",
+   "signature": "math:abs([as], field)",
+   "url": "functions-math-abs.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_abs"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "math:arccos",
+   "signature": "math:arccos([as], field)",
+   "url": "functions-math-arccos.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_arccos"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "math:arcsin",
+   "signature": "math:arcsin([as], field)",
+   "url": "functions-math-arcsin.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_arcsin"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "math:arctan",
+   "signature": "math:arctan([as], field)",
+   "url": "functions-math-arctan.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_arctan"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "math:arctan2",
+   "signature": "math:arctan2([as], x, y)",
+   "url": "functions-math-arctan2.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_arctan2"
+    },
+    {
+     "name": "x",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "y",
+     "type": "string",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "math:ceil",
+   "signature": "math:ceil([as], field)",
+   "url": "functions-math-ceil.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_ceil"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "math:cos",
+   "signature": "math:cos([as], field)",
+   "url": "functions-math-cos.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_cos"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "math:cosh",
+   "signature": "math:cosh([as], field)",
+   "url": "functions-math-cosh.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_cosh"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "math:deg2rad",
+   "signature": "math:deg2rad([as], field)",
+   "url": "functions-math-deg2rad.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_deg2rad"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "math:exp",
+   "signature": "math:exp([as], field)",
+   "url": "functions-math-exp.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_exp"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "math:expm1",
+   "signature": "math:expm1([as], field)",
+   "url": "functions-math-expm1.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_expm1"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "math:floor",
+   "signature": "math:floor([as], field)",
+   "url": "functions-math-floor.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_floor"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "math:log",
+   "signature": "math:log([as], field)",
+   "url": "functions-math-log.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_log"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "math:log10",
+   "signature": "math:log10([as], field)",
+   "url": "functions-math-log10.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_log10"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "math:log1p",
+   "signature": "math:log1p([as], field)",
+   "url": "functions-math-log1p.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_log1p"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "math:log2",
+   "signature": "math:log2([as], field)",
+   "url": "functions-math-log2.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_log2"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "math:mod",
+   "signature": "math:mod([as], divisor, field)",
+   "url": "functions-math-mod.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_mod"
+    },
+    {
+     "name": "divisor",
+     "type": "integer",
+     "required": true
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "math:pow",
+   "signature": "math:pow([as], exponent, field)",
+   "url": "functions-math-pow.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_pow"
+    },
+    {
+     "name": "exponent",
+     "type": "integer",
+     "required": true
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "math:rad2deg",
+   "signature": "math:rad2deg([as], field)",
+   "url": "functions-math-rad2deg.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_rad2deg"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "math:sin",
+   "signature": "math:sin([as], field)",
+   "url": "functions-math-sin.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_sin"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "math:sinh",
+   "signature": "math:sinh([as], field)",
+   "url": "functions-math-sinh.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_sinh"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "math:spherical2cartesian",
+   "signature": "math:spherical2cartesian([as], azimuth, polar, radius)",
+   "url": "functions-math-spherical2cartesian.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_spherical2cartesian"
+    },
+    {
+     "name": "azimuth",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "polar",
+     "type": "integer",
+     "required": true
+    },
+    {
+     "name": "radius",
+     "type": "string",
+     "required": true,
+     "default": "1.0"
+    }
+   ]
+  },
+  {
+   "name": "math:sqrt",
+   "signature": "math:sqrt([as], field)",
+   "url": "functions-math-sqrt.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_sqrt"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "math:tan",
+   "signature": "math:tan([as], field)",
+   "url": "functions-math-tan.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_tan"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "math:tanh",
+   "signature": "math:tanh([as], field)",
+   "url": "functions-math-tanh.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_tanh"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "max",
+   "signature": "max([as], field)",
+   "url": "functions-max.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_max"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "min",
+   "signature": "min([as], field)",
+   "url": "functions-min.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_min"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "neighbor",
+   "signature": "neighbor([direction], [distance], include, [prefix])",
+   "url": "functions-neighbor.html",
+   "kind": [
+    "Streaming",
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "direction",
+     "type": "fixed values",
+     "required": false,
+     "default": "preceding",
+     "values": [
+      "preceding",
+      "succeeding"
+     ]
+    },
+    {
+     "name": "distance",
+     "type": "integer",
+     "required": false,
+     "default": "1"
+    },
+    {
+     "name": "include",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "prefix",
+     "type": "string",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "now",
+   "signature": "now([as])",
+   "url": "functions-now.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_now",
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "objectArray:eval",
+   "signature": "objectArray:eval(array, asArray, function, [var])",
+   "url": "functions-objectarray-eval.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "array",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "asArray",
+     "type": "string",
+     "required": true,
+     "default": "value passed to the array parameter"
+    },
+    {
+     "name": "function",
+     "type": "non-aggregate function",
+     "required": true
+    },
+    {
+     "name": "var",
+     "type": "string",
+     "required": false,
+     "default": "input array name"
+    }
+   ]
+  },
+  {
+   "name": "objectArray:exists",
+   "signature": "objectArray:exists(array, condition, [var])",
+   "url": "functions-objectarray-exists.html",
+   "kind": [
+    "Filter"
+   ],
+   "params": [
+    {
+     "name": "array",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "condition",
+     "type": "non-aggregate exprssion",
+     "required": true
+    },
+    {
+     "name": "var",
+     "type": "string",
+     "required": false,
+     "default": "input array name."
+    }
+   ]
+  },
+  {
+   "name": "parseCEF",
+   "signature": "parseCEF([field], [headerprefix], [keeplabels], [labelprefix], [prefix])",
+   "url": "functions-parsecef.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@rawstring",
+     "unnamed": true
+    },
+    {
+     "name": "headerprefix",
+     "type": "string",
+     "required": false,
+     "default": "cef."
+    },
+    {
+     "name": "keeplabels",
+     "type": "boolean",
+     "required": false,
+     "default": "false"
+    },
+    {
+     "name": "labelprefix",
+     "type": "string",
+     "required": false,
+     "default": "cef.label."
+    },
+    {
+     "name": "prefix",
+     "type": "string",
+     "required": false,
+     "default": "cef.ext."
+    }
+   ]
+  },
+  {
+   "name": "parseCsv",
+   "signature": "parseCsv(columns, [delimiter], [excludeEmpty], field, [trim])",
+   "url": "functions-parsecsv.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "columns",
+     "type": "string or array",
+     "required": true
+    },
+    {
+     "name": "delimiter",
+     "type": "string",
+     "required": false,
+     "default": ","
+    },
+    {
+     "name": "excludeEmpty",
+     "type": "boolean",
+     "required": false,
+     "default": "false"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "default": "@rawstring",
+     "unnamed": true
+    },
+    {
+     "name": "trim",
+     "type": "boolean",
+     "required": false,
+     "default": "false"
+    }
+   ]
+  },
+  {
+   "name": "parseFixedWidth",
+   "signature": "parseFixedWidth(columns, [field], [trim], widths)",
+   "url": "functions-parsefixedwidth.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "columns",
+     "type": "array of strings",
+     "required": true
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@rawstring",
+     "unnamed": true
+    },
+    {
+     "name": "trim",
+     "type": "boolean",
+     "required": false,
+     "default": "true"
+    },
+    {
+     "name": "widths",
+     "type": "array of numbers",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "parseHexString",
+   "signature": "parseHexString([as], [charset], field)",
+   "url": "functions-parsehexstring.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_parsehexstring"
+    },
+    {
+     "name": "charset",
+     "type": "string",
+     "required": false,
+     "default": "UTF-8",
+     "values": [
+      "ISO-8859-1",
+      "UTF-16BE",
+      "UTF-16LE",
+      "UTF-8"
+     ]
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "parseInt",
+   "signature": "parseInt([as], [endian], field, [radix])",
+   "url": "functions-parseint.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "endian",
+     "type": "string",
+     "required": false,
+     "default": "big"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "radix",
+     "type": "integer",
+     "required": false,
+     "default": "16"
+    }
+   ]
+  },
+  {
+   "name": "parseJson",
+   "signature": "parseJson([exclude], [excludeEmpty], [field], [handleNull], [include], [prefix], [removePrefixes])",
+   "url": "functions-parsejson.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "exclude",
+     "type": "array of strings",
+     "required": false,
+     "default": "[]"
+    },
+    {
+     "name": "excludeEmpty",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@rawstring",
+     "unnamed": true
+    },
+    {
+     "name": "handleNull",
+     "type": "string",
+     "required": false,
+     "default": "keep",
+     "values": [
+      "discard",
+      "empty",
+      "keep"
+     ]
+    },
+    {
+     "name": "include",
+     "type": "array of strings",
+     "required": false,
+     "default": "[]"
+    },
+    {
+     "name": "prefix",
+     "type": "string",
+     "required": false,
+     "default": "blank"
+    },
+    {
+     "name": "removePrefixes",
+     "type": "array of strings",
+     "required": false,
+     "default": "[]"
+    }
+   ]
+  },
+  {
+   "name": "parseLEEF",
+   "signature": "parseLEEF([delimiter], [field], [headerprefix], [keeplabels], [labelprefix], [parsetime], [prefix], [timezone])",
+   "url": "functions-parseleef.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "delimiter",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@rawstring",
+     "unnamed": true
+    },
+    {
+     "name": "headerprefix",
+     "type": "string",
+     "required": false,
+     "default": "leef."
+    },
+    {
+     "name": "keeplabels",
+     "type": "boolean",
+     "required": false,
+     "default": "false"
+    },
+    {
+     "name": "labelprefix",
+     "type": "string",
+     "required": false,
+     "default": "leef.label"
+    },
+    {
+     "name": "parsetime",
+     "type": "boolean",
+     "required": false,
+     "default": "true",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "prefix",
+     "type": "string",
+     "required": false,
+     "default": "leef.ext."
+    },
+    {
+     "name": "timezone",
+     "type": "string",
+     "required": false,
+     "default": "Z"
+    }
+   ]
+  },
+  {
+   "name": "parseTimestamp",
+   "signature": "parseTimestamp([addErrors], [as], [caseSensitive], field, [format], [timezone], [timezoneAs], [timezoneField])",
+   "url": "functions-parsetimestamp.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "addErrors",
+     "type": "boolean",
+     "required": false,
+     "default": "true"
+    },
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "@timestamp"
+    },
+    {
+     "name": "caseSensitive",
+     "type": "boolean",
+     "required": false,
+     "default": "true",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "format",
+     "type": "string",
+     "required": false,
+     "default": "yyyy-MM-dd'T'HH:mm:ss[.SSSSSSSSS]XXXXX",
+     "unnamed": true,
+     "values": [
+      "millis",
+      "milliseconds",
+      "nanos",
+      "seconds",
+      "unixTimeMillis",
+      "unixTimeSeconds",
+      "unixtime"
+     ]
+    },
+    {
+     "name": "timezone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "timezoneAs",
+     "type": "string",
+     "required": false,
+     "default": "@timezone"
+    },
+    {
+     "name": "timezoneField",
+     "type": "string",
+     "required": false,
+     "default": "@timezone"
+    }
+   ]
+  },
+  {
+   "name": "parseUri",
+   "signature": "parseUri([defaultBase], field, [prefix])",
+   "url": "functions-parseuri.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "defaultBase",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "prefix",
+     "type": "string",
+     "required": false,
+     "default": "input field name"
+    }
+   ]
+  },
+  {
+   "name": "parseUrl",
+   "signature": "parseUrl([as], [field])",
+   "url": "functions-parseurl.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "url",
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "parseXml",
+   "signature": "parseXml(field, [prefix], [strict])",
+   "url": "functions-parsexml.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "default": "@rawstring",
+     "unnamed": true
+    },
+    {
+     "name": "prefix",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "strict",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "partition",
+   "signature": "partition(condition, function, [split])",
+   "url": "functions-partition.html",
+   "kind": [
+    "Streaming",
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "condition",
+     "type": "non-aggregate expression",
+     "required": true
+    },
+    {
+     "name": "function",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "split",
+     "type": "fixed values",
+     "required": false,
+     "default": "before",
+     "values": [
+      "after",
+      "before"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "percentage",
+   "signature": "percentage([as], condition)",
+   "url": "functions-percentage.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_percentage"
+    },
+    {
+     "name": "condition",
+     "type": "non-aggregate expression",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "percentile",
+   "signature": "percentile([accuracy], [as], field, [percentiles])",
+   "url": "functions-percentile.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "accuracy",
+     "type": "double",
+     "required": false,
+     "default": "0.01"
+    },
+    {
+     "name": "as",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "percentiles",
+     "type": "array of numbers",
+     "required": false,
+     "default": "[50, 75, 99]"
+    }
+   ]
+  },
+  {
+   "name": "range",
+   "signature": "range([as], field)",
+   "url": "functions-range.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_range"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "readFile",
+   "signature": "readFile(file, [include], [limit])",
+   "url": "functions-readfile.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "file",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "include",
+     "type": "array of strings",
+     "required": false
+    },
+    {
+     "name": "limit",
+     "type": "integer",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "readPersistedAggregation",
+   "signature": "readPersistedAggregation([end], [start], tag, [view])",
+   "url": "functions-readpersistedaggregation.html",
+   "params": [
+    {
+     "name": "end",
+     "type": "string",
+     "required": false,
+     "default": "Same as the primary query"
+    },
+    {
+     "name": "start",
+     "type": "string",
+     "required": false,
+     "default": "Same as the primary query"
+    },
+    {
+     "name": "tag",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "view",
+     "type": "string",
+     "required": false,
+     "default": "Same as the primary query"
+    }
+   ]
+  },
+  {
+   "name": "regex",
+   "signature": "regex([field], [flags], [limit], regex, [repeat], [strict])",
+   "url": "functions-regex.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@rawstring"
+    },
+    {
+     "name": "flags",
+     "type": "string",
+     "required": false,
+     "default": "m"
+    },
+    {
+     "name": "limit",
+     "type": "integer",
+     "required": false,
+     "default": "100"
+    },
+    {
+     "name": "regex",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "repeat",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "strict",
+     "type": "boolean",
+     "required": false,
+     "default": "true",
+     "values": [
+      "false",
+      "true"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "remoteTable",
+   "signature": "remoteTable(connection, [end], include, name, query, [start])",
+   "url": "functions-remotetable.html",
+   "params": [
+    {
+     "name": "connection",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "end",
+     "type": "string",
+     "required": false,
+     "default": "same as primary query"
+    },
+    {
+     "name": "include",
+     "type": "array of strings",
+     "required": true
+    },
+    {
+     "name": "name",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "query",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "start",
+     "type": "string",
+     "required": false,
+     "default": "same as primary query"
+    }
+   ]
+  },
+  {
+   "name": "rename",
+   "signature": "rename([as], field)",
+   "url": "functions-rename.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "field",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "replace",
+   "signature": "replace([as], [field], [flags], regex, [replacement], [with])",
+   "url": "functions-replace.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "input field"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@rawstring"
+    },
+    {
+     "name": "flags",
+     "type": "string",
+     "required": false,
+     "default": "m"
+    },
+    {
+     "name": "regex",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "replacement",
+     "type": "string",
+     "required": false,
+     "default": "\"\""
+    },
+    {
+     "name": "with",
+     "type": "string",
+     "required": false,
+     "default": "\"\""
+    }
+   ]
+  },
+  {
+   "name": "reverseDns",
+   "signature": "reverseDns([as], field, [limit], [server])",
+   "url": "functions-reversedns.html",
+   "kind": [
+    "Asynchronous"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_hostname"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "limit",
+     "type": "integer",
+     "required": false,
+     "default": "ReverseDnsDefaultLimit"
+    },
+    {
+     "name": "server",
+     "type": "string",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "round",
+   "signature": "round([as], field, [how])",
+   "url": "functions-round.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "Same name as input field"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "how",
+     "type": "string",
+     "required": false,
+     "default": "round",
+     "values": [
+      "ceil",
+      "floor",
+      "round"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "sample",
+   "signature": "sample([field], [percentage])",
+   "url": "functions-sample.html",
+   "kind": [
+    "Filter"
+   ],
+   "params": [
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@timestamp"
+    },
+    {
+     "name": "percentage",
+     "type": "double",
+     "required": false,
+     "default": "1",
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "sankey",
+   "signature": "sankey(source, target, [weight])",
+   "url": "functions-sankey.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "source",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "target",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "weight",
+     "type": "string",
+     "required": false,
+     "default": "count(as=_count)"
+    }
+   ]
+  },
+  {
+   "name": "select",
+   "signature": "select(fields)",
+   "url": "functions-select.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "fields",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "selectFromMax",
+   "signature": "selectFromMax(field, include)",
+   "url": "functions-selectfrommax.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "include",
+     "type": "array of strings",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "selectFromMin",
+   "signature": "selectFromMin(field, include)",
+   "url": "functions-selectfrommin.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "include",
+     "type": "array of strings",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "selectLast",
+   "signature": "selectLast(fields)",
+   "url": "functions-selectlast.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "fields",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "selfJoin",
+   "signature": "selfJoin([collect], field, [limit], [postfilter], [prefilter], [select], where)",
+   "url": "functions-selfjoin.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "collect",
+     "type": "array of strings",
+     "required": false,
+     "default": "(none)"
+    },
+    {
+     "name": "field",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "limit",
+     "type": "integer",
+     "required": false,
+     "default": "20000"
+    },
+    {
+     "name": "postfilter",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "prefilter",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "select",
+     "type": "array of strings",
+     "required": false,
+     "default": "(none)"
+    },
+    {
+     "name": "where",
+     "type": "string",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "selfJoinFilter",
+   "signature": "selfJoinFilter(field, [prefilter], where)",
+   "url": "functions-selfjoinfilter.html",
+   "kind": [
+    "Filter"
+   ],
+   "params": [
+    {
+     "name": "field",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "prefilter",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "where",
+     "type": "string",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "series",
+   "signature": "series(collect, [endmatch], [maxduration], [maxpause], [memlimit], [separator], [startmatch])",
+   "url": "functions-series.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "collect",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "endmatch",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "maxduration",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "maxpause",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "memlimit",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "separator",
+     "type": "string",
+     "required": false,
+     "default": "\\n"
+    },
+    {
+     "name": "startmatch",
+     "type": "string",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "session",
+   "signature": "session([function], [maxpause])",
+   "url": "functions-session.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "function",
+     "type": "array of strings",
+     "required": false,
+     "default": "count(as=_count)",
+     "unnamed": true
+    },
+    {
+     "name": "maxpause",
+     "type": "string",
+     "required": false,
+     "default": "15m"
+    }
+   ]
+  },
+  {
+   "name": "setField",
+   "signature": "setField(target, value)",
+   "url": "functions-setfield.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "target",
+     "type": "expression",
+     "required": true,
+     "default": "__setField"
+    },
+    {
+     "name": "value",
+     "type": "expression",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "setTimeInterval",
+   "signature": "setTimeInterval([end], start, [timezone])",
+   "url": "functions-settimeinterval.html",
+   "kind": [
+    "Filter"
+   ],
+   "params": [
+    {
+     "name": "end",
+     "type": "string",
+     "required": false,
+     "default": "now"
+    },
+    {
+     "name": "start",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "timezone",
+     "type": "string",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "shannonEntropy",
+   "signature": "shannonEntropy([as], field)",
+   "url": "functions-shannonentropy.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_shannonentropy"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "slidingTimeWindow",
+   "signature": "slidingTimeWindow([current], function, span, [timestampfield])",
+   "url": "functions-slidingtimewindow.html",
+   "kind": [
+    "Streaming",
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "current",
+     "type": "string",
+     "required": false,
+     "default": "include",
+     "values": [
+      "exclude",
+      "include"
+     ]
+    },
+    {
+     "name": "function",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "span",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "timestampfield",
+     "type": "string",
+     "required": false,
+     "default": "Either @timestamp or @ingestTimestamp depending on what is selected for the query."
+    }
+   ]
+  },
+  {
+   "name": "slidingWindow",
+   "signature": "slidingWindow([current], events, function)",
+   "url": "functions-slidingwindow.html",
+   "kind": [
+    "Streaming",
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "current",
+     "type": "string",
+     "required": false,
+     "default": "include",
+     "values": [
+      "exclude",
+      "include"
+     ]
+    },
+    {
+     "name": "events",
+     "type": "integer",
+     "required": true
+    },
+    {
+     "name": "function",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "sort",
+   "signature": "sort([field], [limit], [order], [reverse], [type])",
+   "url": "functions-sort.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "field",
+     "type": "array of strings",
+     "required": false,
+     "default": "_count",
+     "unnamed": true
+    },
+    {
+     "name": "limit",
+     "type": "integer",
+     "required": false,
+     "default": "200",
+     "values": [
+      "max"
+     ]
+    },
+    {
+     "name": "order",
+     "type": "array of strings",
+     "required": false,
+     "default": "desc",
+     "values": [
+      "asc",
+      "desc"
+     ]
+    },
+    {
+     "name": "reverse",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "deprecated": true,
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "type",
+     "type": "array of strings",
+     "required": false,
+     "default": "number",
+     "values": [
+      "hex",
+      "number",
+      "string"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "split",
+   "signature": "split([field], [strip])",
+   "url": "functions-split.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "_events",
+     "unnamed": true
+    },
+    {
+     "name": "strip",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "splitString",
+   "signature": "splitString([as], by, [field], [index])",
+   "url": "functions-splitstring.html",
+   "kind": [
+    "Transformation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_splitstring"
+    },
+    {
+     "name": "by",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@rawstring",
+     "unnamed": true
+    },
+    {
+     "name": "index",
+     "type": "integer",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "start",
+   "signature": "start([as])",
+   "url": "functions-start.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_start",
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "stats",
+   "signature": "stats([function])",
+   "url": "functions-stats.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "function",
+     "type": "array of strings",
+     "required": false,
+     "default": "count(as=_count)",
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "stdDev",
+   "signature": "stdDev([as], field)",
+   "url": "functions-stddev.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_stddev"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "stripAnsiCodes",
+   "signature": "stripAnsiCodes([as], field)",
+   "url": "functions-stripansicodes.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "default": "@rawstring",
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "subnet",
+   "signature": "subnet([as], bits, field)",
+   "url": "functions-subnet.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_subnet"
+    },
+    {
+     "name": "bits",
+     "type": "integer",
+     "required": true
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "sum",
+   "signature": "sum([as], field)",
+   "url": "functions-sum.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_sum"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "table",
+   "signature": "table(fields, [limit], [order], [reverse], [sortby], [type])",
+   "url": "functions-table.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "fields",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "limit",
+     "type": "integer",
+     "required": false,
+     "default": "200",
+     "values": [
+      "max"
+     ]
+    },
+    {
+     "name": "order",
+     "type": "array of strings",
+     "required": false,
+     "default": "desc",
+     "values": [
+      "asc",
+      "desc"
+     ]
+    },
+    {
+     "name": "reverse",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "sortby",
+     "type": "array of strings",
+     "required": false,
+     "default": "@timestamp"
+    },
+    {
+     "name": "type",
+     "type": "array of strings",
+     "required": false,
+     "default": "number",
+     "values": [
+      "any",
+      "hex",
+      "number",
+      "string"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "tail",
+   "signature": "tail([limit])",
+   "url": "functions-tail.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "limit",
+     "type": "integer",
+     "required": false,
+     "default": "200",
+     "unnamed": true,
+     "values": [
+      "max"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "test",
+   "signature": "test(expression)",
+   "url": "functions-test.html",
+   "kind": [
+    "Filter"
+   ],
+   "params": [
+    {
+     "name": "expression",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "text:contains",
+   "signature": "text:contains(string, substring)",
+   "url": "functions-text-contains.html",
+   "kind": [
+    "Filter"
+   ],
+   "params": [
+    {
+     "name": "string",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "substring",
+     "type": "string",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "text:editDistance",
+   "signature": "text:editDistance([allowTranspositions], [as], [ignoreCase], maxDistance, reference, target)",
+   "url": "functions-text-editdistance.html",
+   "params": [
+    {
+     "name": "allowTranspositions",
+     "type": "boolean",
+     "required": false,
+     "default": "true"
+    },
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_distance"
+    },
+    {
+     "name": "ignoreCase",
+     "type": "boolean",
+     "required": false,
+     "default": "false"
+    },
+    {
+     "name": "maxDistance",
+     "type": "integer",
+     "required": true
+    },
+    {
+     "name": "reference",
+     "type": "expression",
+     "required": true
+    },
+    {
+     "name": "target",
+     "type": "expression",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "text:editDistanceAsArray",
+   "signature": "text:editDistanceAsArray([allowTranspositions], [asArray], [ignoreCase], maxDistance, references, target)",
+   "url": "functions-text-editdistanceasarray.html",
+   "params": [
+    {
+     "name": "allowTranspositions",
+     "type": "boolean",
+     "required": false,
+     "default": "true"
+    },
+    {
+     "name": "asArray",
+     "type": "string",
+     "required": false,
+     "default": "_distance"
+    },
+    {
+     "name": "ignoreCase",
+     "type": "boolean",
+     "required": false,
+     "default": "false"
+    },
+    {
+     "name": "maxDistance",
+     "type": "integer",
+     "required": true
+    },
+    {
+     "name": "references",
+     "type": "array of strings",
+     "required": true
+    },
+    {
+     "name": "target",
+     "type": "expression",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "text:endsWith",
+   "signature": "text:endsWith(string, substring)",
+   "url": "functions-text-endswith.html",
+   "kind": [
+    "Filter"
+   ],
+   "params": [
+    {
+     "name": "string",
+     "type": "expression",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "substring",
+     "type": "expression",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "text:length",
+   "signature": "text:length([as], string)",
+   "url": "functions-text-length.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_length"
+    },
+    {
+     "name": "string",
+     "type": "expression",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "text:positionOf",
+   "signature": "text:positionOf([as], [begin], character, [occurrence], string)",
+   "url": "functions-text-positionof.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_position"
+    },
+    {
+     "name": "begin",
+     "type": "expression",
+     "required": false,
+     "default": "0"
+    },
+    {
+     "name": "character",
+     "type": "expression",
+     "required": true
+    },
+    {
+     "name": "occurrence",
+     "type": "expression",
+     "required": false,
+     "default": "1"
+    },
+    {
+     "name": "string",
+     "type": "expression",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "text:startsWith",
+   "signature": "text:startsWith(string, substring)",
+   "url": "functions-text-startswith.html",
+   "kind": [
+    "Filter"
+   ],
+   "params": [
+    {
+     "name": "string",
+     "type": "expression",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "substring",
+     "type": "expression",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "text:substring",
+   "signature": "text:substring([as], [begin], [end], string)",
+   "url": "functions-text-substring.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_string"
+    },
+    {
+     "name": "begin",
+     "type": "expression",
+     "required": false,
+     "default": "0"
+    },
+    {
+     "name": "end",
+     "type": "expression",
+     "required": false
+    },
+    {
+     "name": "string",
+     "type": "expression",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "text:trim",
+   "signature": "text:trim([as], field, [mode])",
+   "url": "functions-text-trim.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_trim"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "mode",
+     "type": "string",
+     "required": false,
+     "default": "both",
+     "values": [
+      "both",
+      "end",
+      "start"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "time:dayOfMonth",
+   "signature": "time:dayOfMonth([as], [field], [timezone], [timezoneField])",
+   "url": "functions-time-dayofmonth.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_dayOfMonth"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@timestamp",
+     "unnamed": true
+    },
+    {
+     "name": "timezone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "timezoneField",
+     "type": "string",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "time:dayOfWeek",
+   "signature": "time:dayOfWeek([as], field, [timezone], [timezoneField])",
+   "url": "functions-time-dayofweek.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_dayOfWeek"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "default": "@timestamp",
+     "unnamed": true
+    },
+    {
+     "name": "timezone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "timezoneField",
+     "type": "string",
+     "required": false,
+     "default": "@timezone"
+    }
+   ]
+  },
+  {
+   "name": "time:dayOfWeekName",
+   "signature": "time:dayOfWeekName([as], [field], [timezone], [timezoneField])",
+   "url": "functions-time-dayofweekname.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_dayOfWeekName"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@timestamp",
+     "unnamed": true
+    },
+    {
+     "name": "timezone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "timezoneField",
+     "type": "string",
+     "required": false,
+     "default": "@timezone"
+    }
+   ]
+  },
+  {
+   "name": "time:dayOfYear",
+   "signature": "time:dayOfYear([as], [field], [timezone], [timezoneField])",
+   "url": "functions-time-dayofyear.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_dayOfYear"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@timestamp",
+     "unnamed": true
+    },
+    {
+     "name": "timezone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "timezoneField",
+     "type": "string",
+     "required": false,
+     "default": "@timezone"
+    }
+   ]
+  },
+  {
+   "name": "time:hour",
+   "signature": "time:hour([as], [field], [timezone], [timezoneField])",
+   "url": "functions-time-hour.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_hour"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@timestamp",
+     "unnamed": true
+    },
+    {
+     "name": "timezone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "timezoneField",
+     "type": "string",
+     "required": false,
+     "default": "@timezone"
+    }
+   ]
+  },
+  {
+   "name": "time:millisecond",
+   "signature": "time:millisecond([as], [field], [timezone], [timezoneField])",
+   "url": "functions-time-millisecond.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_millisecond"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@timestamp",
+     "unnamed": true
+    },
+    {
+     "name": "timezone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "timezoneField",
+     "type": "string",
+     "required": false,
+     "default": "@timezone"
+    }
+   ]
+  },
+  {
+   "name": "time:minute",
+   "signature": "time:minute([as], [field], [timezone], [timezoneField])",
+   "url": "functions-time-minute.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_minute"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@timestamp",
+     "unnamed": true
+    },
+    {
+     "name": "timezone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "timezoneField",
+     "type": "string",
+     "required": false,
+     "default": "@timezone"
+    }
+   ]
+  },
+  {
+   "name": "time:month",
+   "signature": "time:month([as], [field], [timezone], [timezoneField])",
+   "url": "functions-time-month.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_month"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@timestamp",
+     "unnamed": true
+    },
+    {
+     "name": "timezone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "timezoneField",
+     "type": "string",
+     "required": false,
+     "default": "@timezone"
+    }
+   ]
+  },
+  {
+   "name": "time:monthName",
+   "signature": "time:monthName([as], [field], [timezone], [timezoneField])",
+   "url": "functions-time-monthname.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_monthName"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@timestamp",
+     "unnamed": true
+    },
+    {
+     "name": "timezone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "timezoneField",
+     "type": "string",
+     "required": false,
+     "default": "@timezone"
+    }
+   ]
+  },
+  {
+   "name": "time:second",
+   "signature": "time:second([as], [field], [timezone], [timezoneField])",
+   "url": "functions-time-second.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_second"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@timestamp",
+     "unnamed": true
+    },
+    {
+     "name": "timezone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "timezoneField",
+     "type": "string",
+     "required": false,
+     "default": "@timezone"
+    }
+   ]
+  },
+  {
+   "name": "time:weekOfYear",
+   "signature": "time:weekOfYear([as], [field], [timezone], [timezoneField])",
+   "url": "functions-time-weekofyear.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_weekOfYear"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@timestamp",
+     "unnamed": true
+    },
+    {
+     "name": "timezone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "timezoneField",
+     "type": "string",
+     "required": false,
+     "default": "@timezone"
+    }
+   ]
+  },
+  {
+   "name": "time:year",
+   "signature": "time:year([as], [field], [timezone], [timezoneField])",
+   "url": "functions-time-year.html",
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_year"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@timestamp",
+     "unnamed": true
+    },
+    {
+     "name": "timezone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "timezoneField",
+     "type": "string",
+     "required": false,
+     "default": "@timezone"
+    }
+   ]
+  },
+  {
+   "name": "timeChart",
+   "signature": "timeChart([buckets], [function], [limit], [minSpan], [series], [span], [timezone], [unit])",
+   "url": "functions-timechart.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "buckets",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "function",
+     "type": "array of strings",
+     "required": false,
+     "default": "count()"
+    },
+    {
+     "name": "limit",
+     "type": "integer",
+     "required": false,
+     "default": "10"
+    },
+    {
+     "name": "minSpan",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "series",
+     "type": "string",
+     "required": false,
+     "unnamed": true
+    },
+    {
+     "name": "span",
+     "type": "string",
+     "required": false,
+     "default": "auto"
+    },
+    {
+     "name": "timezone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "unit",
+     "type": "string",
+     "required": false,
+     "default": "No conversion"
+    }
+   ]
+  },
+  {
+   "name": "tokenHash",
+   "signature": "tokenHash([as], field)",
+   "url": "functions-tokenhash.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_tokenHash"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "top",
+   "signature": "top([as], [error], field, [limit], [max], [percent], [rest], [sum])",
+   "url": "functions-top.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_count or _sum"
+    },
+    {
+     "name": "error",
+     "type": "integer",
+     "required": false,
+     "default": "5"
+    },
+    {
+     "name": "field",
+     "type": "array of strings",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "limit",
+     "type": "integer",
+     "required": false,
+     "default": "10"
+    },
+    {
+     "name": "max",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "percent",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "rest",
+     "type": "string",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "sum",
+     "type": "string",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "transpose",
+   "signature": "transpose([column], [header], [limit], [pivot])",
+   "url": "functions-transpose.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "column",
+     "type": "string",
+     "required": false,
+     "default": "column"
+    },
+    {
+     "name": "header",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "limit",
+     "type": "integer",
+     "required": false,
+     "default": "5"
+    },
+    {
+     "name": "pivot",
+     "type": "string",
+     "required": false,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "unit:convert",
+   "signature": "unit:convert([as], [binary], field, [from], [keepUnit], [to], [unit])",
+   "url": "functions-unit-convert.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "binary",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "from",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "keepUnit",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "to",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "unit",
+     "type": "string",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "upper",
+   "signature": "upper([as], field, [locale])",
+   "url": "functions-upper.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_upper"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    },
+    {
+     "name": "locale",
+     "type": "string",
+     "required": false,
+     "default": "system locale"
+    }
+   ]
+  },
+  {
+   "name": "urlDecode",
+   "signature": "urlDecode([as], field)",
+   "url": "functions-urldecode.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_urldecode"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "urlEncode",
+   "signature": "urlEncode([as], field)",
+   "url": "functions-urlencode.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_urlencode"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "wildcard",
+   "signature": "wildcard([field], [ignoreCase], [includeEverythingOnAsterisk], pattern)",
+   "url": "functions-wildcard.html",
+   "kind": [
+    "Filter"
+   ],
+   "params": [
+    {
+     "name": "field",
+     "type": "array of strings",
+     "required": false
+    },
+    {
+     "name": "ignoreCase",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "includeEverythingOnAsterisk",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "pattern",
+     "type": "string",
+     "required": true,
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "window",
+   "signature": "window([buckets], [function], [span])",
+   "url": "functions-window.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "buckets",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "function",
+     "type": "array of strings",
+     "required": false,
+     "default": "count(as=_count)",
+     "unnamed": true
+    },
+    {
+     "name": "span",
+     "type": "long",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "worldMap",
+   "signature": "worldMap([ip], [lat], [lon], [magnitude], [precision])",
+   "url": "functions-worldmap.html",
+   "kind": [
+    "Aggregate"
+   ],
+   "params": [
+    {
+     "name": "ip",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "lat",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "lon",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "magnitude",
+     "type": "string",
+     "required": false,
+     "default": "count(as=_count)"
+    },
+    {
+     "name": "precision",
+     "type": "integer",
+     "required": false,
+     "default": "4"
+    }
+   ]
+  },
+  {
+   "name": "writeJson",
+   "signature": "writeJson([as], [field])",
+   "url": "functions-writejson.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false,
+     "default": "_json"
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": false,
+     "default": "@rawstring",
+     "unnamed": true
+    }
+   ]
+  },
+  {
+   "name": "xml:prettyPrint",
+   "signature": "xml:prettyPrint([as], field, [step], [strict], [width])",
+   "url": "functions-xml-prettyprint.html",
+   "kind": [
+    "Transformation",
+    "Field Computation"
+   ],
+   "params": [
+    {
+     "name": "as",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "field",
+     "type": "string",
+     "required": true,
+     "default": "@rawstring",
+     "unnamed": true
+    },
+    {
+     "name": "step",
+     "type": "integer",
+     "required": false,
+     "default": "2"
+    },
+    {
+     "name": "strict",
+     "type": "boolean",
+     "required": false,
+     "default": "false",
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    {
+     "name": "width",
+     "type": "integer",
+     "required": false,
+     "default": "80"
+    }
+   ]
+  }
+ ]
+}

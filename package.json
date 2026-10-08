@@ -1,7 +1,7 @@
 {
   "name": "crowdstrike-cql",
   "displayName": "CrowdStrike CQL",
-  "description": "CrowdStrike Query Language (CQL / LogScale / NG-SIEM) support: semantic highlighting, outline, folding, snippets, and queries embedded in Markdown and YAML.",
+  "description": "CrowdStrike Query Language (CQL / LogScale / NG-SIEM) support: function completion, signature help and hover, semantic highlighting, outline, folding, snippets, and queries embedded in Markdown and YAML.",
   "version": "0.1.0",
   "publisher": "brandonvader",
   "author": {
@@ -194,7 +194,8 @@
     "typecheck": "tsc -p .",
     "test:unit": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test \"test/unit/**/*.test.ts\"",
     "corpus:semantic": "npm run build:grammars && node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/corpus-semantic.mjs",
-    "test:integration": "node test/integration/run.mjs"
+    "test:integration": "node test/integration/run.mjs",
+    "catalog": "python3 -I scripts/extract-functions.py"
   },
   "devDependencies": {
     "@types/node": "^24.19.1",

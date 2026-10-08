@@ -4,6 +4,7 @@
 
 import * as vscode from 'vscode';
 import type { Parser, Tree } from 'web-tree-sitter';
+import { complete, hover, type Suggestion, signatureHelp } from './core/assist.ts';
 import { classify, TOKEN_TYPES } from './core/classify.ts';
 import { syntaxProblems } from './core/diagnostics.ts';
 import { folding } from './core/folding.ts';
@@ -63,6 +64,29 @@ function toSymbol(it: OutlineItem): vscode.DocumentSymbol {
   const sym = new vscode.DocumentSymbol(it.name, it.detail, SYMBOL_KINDS[it.kind], toRange(it.range), toRange(it.selectionRange));
   sym.children = it.children.map(toSymbol);
   return sym;
+}
+
+const COMPLETION_KINDS: Record<Suggestion['kind'], vscode.CompletionItemKind> = {
+  function: vscode.CompletionItemKind.Function,
+  parameter: vscode.CompletionItemKind.Property,
+  value: vscode.CompletionItemKind.EnumMember,
+};
+
+const FOLLOW_UP: Record<NonNullable<Suggestion['then']>, vscode.Command> = {
+  signatureHelp: { title: 'Parameter hints', command: 'editor.action.triggerParameterHints' },
+  suggest: { title: 'Suggest', command: 'editor.action.triggerSuggest' },
+};
+
+function toCompletion(s: Suggestion, range: vscode.Range): vscode.CompletionItem {
+  const item = new vscode.CompletionItem(s.label, COMPLETION_KINDS[s.kind]);
+  item.insertText = s.insert.includes('$0') ? new vscode.SnippetString(s.insert) : s.insert;
+  item.range = range;
+  item.detail = s.detail;
+  item.documentation = new vscode.MarkdownString(s.documentation);
+  item.sortText = s.sortText;
+  if (s.deprecated) item.tags = [vscode.CompletionItemTag.Deprecated];
+  if (s.then) item.command = FOLLOW_UP[s.then];
+  return item;
 }
 
 function lines(doc: vscode.TextDocument): string[] {
@@ -126,6 +150,48 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
           }
           return range ?? new vscode.SelectionRange(new vscode.Range(pos, pos));
         });
+      },
+    }),
+
+    vscode.languages.registerCompletionItemProvider(
+      SELECTOR,
+      {
+        provideCompletionItems(doc, pos) {
+          const offset = doc.offsetAt(pos);
+          const { start, items } = complete(doc.getText(), offset);
+          const range = new vscode.Range(doc.positionAt(start), pos);
+          return items.map((s) => toCompletion(s, range));
+        },
+      },
+      '(',
+      ',',
+      '=',
+      '[',
+    ),
+
+    vscode.languages.registerSignatureHelpProvider(
+      SELECTOR,
+      {
+        provideSignatureHelp(doc, pos) {
+          const sig = signatureHelp(doc.getText(), doc.offsetAt(pos));
+          if (!sig) return undefined;
+          const info = new vscode.SignatureInformation(sig.label, new vscode.MarkdownString(sig.documentation));
+          info.parameters = sig.params.map((p) => new vscode.ParameterInformation(p.range, new vscode.MarkdownString(p.documentation)));
+          const help = new vscode.SignatureHelp();
+          help.signatures = [info];
+          help.activeSignature = 0;
+          help.activeParameter = sig.active;
+          return help;
+        },
+      },
+      { triggerCharacters: ['(', ','], retriggerCharacters: ['='] },
+    ),
+
+    vscode.languages.registerHoverProvider(SELECTOR, {
+      provideHover(doc, pos) {
+        const tree = trees.get(doc);
+        const h = tree && hover(tree, doc.offsetAt(pos));
+        return h && new vscode.Hover(new vscode.MarkdownString(h.markdown), new vscode.Range(doc.positionAt(h.start), doc.positionAt(h.end)));
       },
     }),
 
