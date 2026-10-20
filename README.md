@@ -8,8 +8,39 @@ LogScale.
 > endorsed by or supported by CrowdStrike. For help with CQL itself, see
 > [CrowdStrike's documentation](https://library.humio.com/) and support.
 
-| File types | `.ngsiem`, `.logscale`, `.lql` |
-| --- | --- |
+## Installation
+
+Requires VS Code 1.95 or later, on the desktop or in VS Code for the Web.
+
+### From the Marketplace (recommended)
+
+1. Open the Extensions view: `Ctrl+Shift+X` (`Cmd+Shift+X` on macOS).
+2. Search for **CrowdStrike CQL** and pick **CrowdStrike CQL (Unofficial)**
+   by TheTechPirate.
+3. Click **Install**.
+
+Or open the
+[Marketplace page](https://marketplace.visualstudio.com/items?itemName=TheTechPirate.crowdstrike-cql),
+or run `code --install-extension TheTechPirate.crowdstrike-cql`. Installed
+this way, the extension updates automatically.
+
+### Manually from a VSIX file
+
+For machines without Marketplace access:
+
+1. Download `crowdstrike-cql-<version>.vsix` from the latest
+   [GitHub release](https://github.com/brandonvader/crowdstrike-cql-vscode/releases/latest).
+   Each release lists the file's SHA-256 checksum.
+2. In the Extensions view, open the **⋯** menu, choose
+   **Install from VSIX…** and select the file. Or run
+   `code --install-extension crowdstrike-cql-<version>.vsix`.
+
+A manually installed extension does not update itself; install the next
+release's VSIX the same way.
+
+### File types
+
+Files ending in `.ngsiem`, `.logscale` or `.lql` open as CQL automatically.
 
 > `.cql` is intentionally **not** claimed: it collides with Cassandra CQL.
 > To use it anyway, add this to your `settings.json`:
