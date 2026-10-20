@@ -229,6 +229,10 @@ it in the web worker host, as on vscode.dev.
   an `examples.jsonl` built by [`scripts/scrape-docs.py`](scripts/scrape-docs.py).
 - `npm run corpus:semantic` reports the tree-sitter parse rate on the same
   corpus and every place where a semantic token disagrees with the grammar.
+- Releasing: bump `version` in `package.json`, add its `CHANGELOG.md`
+  section, merge, then push a `vX.Y.Z` tag. The Release workflow builds and
+  tests the VSIX, creates the GitHub release and publishes to Open VSX. Upload
+  the release's VSIX to the VS Code Marketplace by hand.
 
 The TextMate grammar follows the tree-sitter grammar of the companion
 [Zed extension](https://github.com/brandonvader/crowdstrike-cql-zed), which is

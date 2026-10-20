@@ -1,0 +1,83 @@
+name: Release
+
+# Pushing a tag vX.Y.Z builds the VSIX, creates the GitHub release with it
+# attached and publishes it to Open VSX. Running the workflow by hand for an
+# existing release publishes that release's attached VSIX instead (the same
+# file uploaded to the VS Code Marketplace). Marketplace uploads stay manual.
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag to publish to Open VSX, e.g. v0.1.0
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ inputs.tag || github.ref_name }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Check tag
+        run: |
+          [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "::error::Tag must look like v1.2.3, got: $TAG"; exit 1; }
+          echo "VERSION=${TAG#v}" >> "$GITHUB_ENV"
+
+      - uses: actions/checkout@v7
+        with:
+          ref: refs/tags/${{ env.TAG }}
+
+      - name: Look for an existing release VSIX
+        id: existing
+        run: |
+          if gh release view "$TAG" --json assets --jq '.assets[].name' 2>/dev/null | grep -qx "crowdstrike-cql-$VERSION.vsix"; then
+            gh release download "$TAG" --pattern "crowdstrike-cql-$VERSION.vsix" --dir out
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-node@v7
+        if: steps.existing.outputs.found != 'true'
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Build, test and package
+        if: steps.existing.outputs.found != 'true'
+        run: |
+          actual=$(node -p "require('./package.json').version")
+          [[ "$actual" == "$VERSION" ]] || { echo "::error::package.json version $actual does not match tag $TAG"; exit 1; }
+          npm ci
+          npm test
+          npx vsce package --out "out/crowdstrike-cql-$VERSION.vsix"
+
+      - name: Create the GitHub release
+        if: steps.existing.outputs.found != 'true'
+        run: |
+          # Release notes: this version's CHANGELOG section.
+          awk -v v="$VERSION" '/^## /{p = index($0, "## " v " ") == 1; next} p' CHANGELOG.md > notes.md
+          gh release create "$TAG" "out/crowdstrike-cql-$VERSION.vsix" --title "$TAG" --notes-file notes.md --verify-tag
+
+      - name: Publish to Open VSX
+        env:
+          OVSX_PAT: ${{ secrets.OPEN_VSX_FONTANA }}
+        run: npx --yes ovsx@1.2.0 publish --packagePath "out/crowdstrike-cql-$VERSION.vsix" --skip-duplicate
+
+      - name: Summary
+        run: |
+          {
+            echo "### $TAG"
+            echo '```'
+            (cd out && sha256sum "crowdstrike-cql-$VERSION.vsix")
+            echo '```'
+            echo "Open VSX: https://open-vsx.org/extension/TheTechPirate/crowdstrike-cql"
+          } >> "$GITHUB_STEP_SUMMARY"
