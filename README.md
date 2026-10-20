@@ -4,6 +4,10 @@ Visual Studio Code language support for the **CrowdStrike Query Language**
 (CQL, formerly LogScale Query Language / Humio), as used in Falcon NG-SIEM and
 LogScale.
 
+> **Unofficial.** This is a community project. It is not affiliated with,
+> endorsed by or supported by CrowdStrike. For help with CQL itself, see
+> [CrowdStrike's documentation](https://library.humio.com/) and support.
+
 | File types | `.ngsiem`, `.logscale`, `.lql` |
 | --- | --- |
 
@@ -208,3 +212,7 @@ Licensed under the GNU General Public License v3.0 (GPL-3.0-only); see
 [`LICENSE`](LICENSE). Anyone who distributes a modified version must release
 its source under the same license. Bundled third-party software is listed in
 [`ThirdPartyNotices.txt`](ThirdPartyNotices.txt).
+
+CrowdStrike, Falcon and LogScale are trademarks of CrowdStrike, Inc. They are
+used here only to describe the language this extension supports. This project
+is not affiliated with or endorsed by CrowdStrike.

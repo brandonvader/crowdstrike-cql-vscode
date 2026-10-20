@@ -2,6 +2,9 @@
 
 ## 0.1.0 (unreleased)
 
+First release, published as `TheTechPirate.crowdstrike-cql`. This is an
+unofficial community extension, not affiliated with CrowdStrike.
+
 - Language `crowdstrike-cql` for `.ngsiem`, `.logscale` and `.lql` files.
 - TextMate grammar following CQL semantics: fields vs. unquoted filter values,
   expressions vs. filters, division vs. regex, URLs vs. comments, `case` and
